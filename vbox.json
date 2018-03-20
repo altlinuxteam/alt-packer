@@ -8,16 +8,13 @@
 
     "builders": [
         {
-            "type": "qemu",
-            "accelerator": "kvm",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
             "vm_name": "alt-server-p8",
             "disk_size": 30000,
-            "disk_cache": "unsafe",
             "output_directory": "output",
             "headless": false,
-            "qemuargs": [
-                [ "-m", "2048M" ]
-            ],
+            "keep_registered": false,
 
             "iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
             "iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
@@ -33,16 +30,28 @@
 
             "http_directory": "./",
 
-            "boot_wait": "2s",
+            "boot_wait": "5s",
             "boot_command": [
                 "<down><wait>",
-                "automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ",
-                "ai ",
-                "curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/",
+                "auto<wait>matic=<wait>met<wait>hod:ht<wait>tp<wait>,ne<wait>two<wait>rk:d<wait>hc<wait>p<wait>,<wait>s<wait>er<wait>ve<wait>r<wait>:<wait>{{.HTTPIP}}<wait>,d<wait>ir<wait>ect<wait>or<wait>y<wait>:<wait>/d<wait>is<wait>tr<wait> ",
+                "ai <wait>",
+                "cu<wait>rl<wait>=h<wait>tt<wait>p<wait>:<wait>/<wait>/{{.HTTPIP}}<wait>:<wait>{{.HTTPPort}}<wait>/<wait>me<wait>ta<wait>da<wait>ta<wait>/",
                 "<enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now"
+            "shutdown_command": "sudo shutdown -P now",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "descr",
+                "--version", "0.1.0"
+            ],
+
+            "format": "ova"
+
+
         }
     ],
 
