@@ -1,0 +1,4 @@
+distr/
+packer_cache/
+*~
+.#*

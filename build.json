@@ -1,0 +1,59 @@
+{
+    "variables": {
+        "ssh_user": "test",
+        "ssh_pass": "123",
+        "http_port_min": "{{env `HTTP_PORT`}}{{env `HTTP_PORT_MIN`}}",
+        "http_port_max": "{{env `HTTP_PORT`}}{{env `HTTP_PORT_MAX`}}"
+    },
+
+    "builders": [
+        {
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "kworkstation-p8",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output",
+            "headless": false,
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
+            "iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
+            "iso_checksum_type": "sha1",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_private_key_file": "temp_ssh",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+                "<down><wait>",
+                "automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ",
+                "ai ",
+                "curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/",
+                "<enter>"
+            ],
+
+            "shutdown_command": "echo '{{user `ssh_pass`}}' | sudo -S shutdown -P now"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": "echo '{{user `ssh_pass`}}' | su -c 'apt-get -y update' && echo '{{user `ssh_pass`}}' | su -c 'apt-get -y dist-upgrade'"
+        },
+        {
+            "type": "shell",
+            "inline": "echo '{{user `ssh_pass`}}' | sudo -S apt-get -y autoremove && echo '{{user `ssh_pass`}}' | sudo -S apt-get -y clean"
+        }
+    ]
+}
