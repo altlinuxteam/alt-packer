@@ -55,6 +55,28 @@
             ]
         },
         {
+            "type": "file",
+            "source": "tmp.cache.conf",
+            "destination": "/tmp/tmp.cache.conf"
+        },
+        {
+            "type": "file",
+            "source": "rc.apt",
+            "destination": "/tmp/rc.apt"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo mv /tmp/rc.apt /etc/rc.d/rc.apt"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo /etc/rc.d/rc.apt"
+        },
+        {
             "type": "shell",
             "inline": "sudo apt-get -y update && sudo apt-get -y dist-upgrade"
         },
