@@ -1,0 +1,10 @@
+{
+"iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
+"iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
+"iso_checksum_type": "sha1",
+
+"ssh_user": "test",
+"ssh_pass": "123",
+"http_port_min": "80",
+"http_port_max": "80"
+}
