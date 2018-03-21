@@ -1,7 +1,9 @@
 distr/
 packer_cache/
 output*/
+results/
 *~
 .#*
 *.iso
 *.box
+*.checksum

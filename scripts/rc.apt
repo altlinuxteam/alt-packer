@@ -19,10 +19,8 @@ create_apt_lists_dir()
         touch "$lists/lock"
 }
 
-#cache_dir=$(apt-config dump |grep "^Dir::Cache .*;$"|sed 's/^Dir::Cache \(.*\);$/\1/')
-#lists_dir=$(apt-config dump |grep "^Dir::State::lists .*;$"|sed 's/^Dir::Cache \(.*\);$/\1/')
-cache_dir="/tmp/apt"
-lists_dir="/tmp/apt/lists"
+cache_dir=$(apt-config dump |grep "^Dir::Cache .*;$"|sed 's/^Dir::Cache[[:space:]]*"\(.*\)";$/\1/')
+lists_dir=$(apt-config dump |grep "^Dir::State::lists .*;$"|sed 's/^Dir::State::lists[[:space:]]*"\(.*\)";$/\1/')
 
 create_apt_cache_dir "$cache_dir"
 create_apt_lists_dir "$lists_dir"

@@ -10,19 +10,20 @@
 sudo mount -o loop packer_cache/<hash_for_iso>.iso distr/
 ```
 
-  Then look into `variables.json` and change default to desired values. Next you can run packer as usual.
+  Then look into `variables.json` and change defaults to desired values. Next you can validate definitions via:
 
 ```sh
-sudo packer -var-file=variables.json build.json
+packer validate -var-file=variables.json build.json
 ```
 
-  Builded images will be available in `output/` directory
-
-## Build by exact provider
-
-  When you need image for exact provider, i.e. VirtualBox you can build it via providing exact `provider` name:
+## Build server image for Vagrant
 
 ```sh
-packer build -var-file=variables.json -only=virtualbox-iso build.json
+sudo packer build -var-file=variables.json -only=srv.vbox build.json
 ```
 
+## Build server image for QEmu
+
+```sh
+sudo packer build -var-file=variables.json -only=srv.qemu build.json
+```

@@ -1,0 +1,31 @@
+{
+  "builds": [
+    {
+      "name": "srv.qcow2",
+      "builder_type": "qemu",
+      "build_time": 1521667145,
+      "files": [
+        {
+          "name": "alt-server-p8",
+          "size": 1917386752
+        }
+      ],
+      "artifact_id": "VM",
+      "packer_run_uuid": "4adc1cf5-14f1-ea5d-498a-c5d026b14174"
+    },
+    {
+      "name": "srv.vbox",
+      "builder_type": "virtualbox-iso",
+      "build_time": 1521667451,
+      "files": [
+        {
+          "name": "alt-server-p8.ova",
+          "size": 789688832
+        }
+      ],
+      "artifact_id": "VM",
+      "packer_run_uuid": "ebd34ce8-09af-68bc-6118-4f0f35694f02"
+    }
+  ],
+  "last_run_uuid": "ebd34ce8-09af-68bc-6118-4f0f35694f02"
+}

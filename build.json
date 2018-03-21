@@ -6,19 +6,24 @@
 
         "ssh_user": "",
         "ssh_pass": "",
+
+        "vagrant_user": "",
+        "vagrant_pass": "",
+
         "http_port_min": "",
         "http_port_max": ""
     },
 
     "builders": [
         {
+            "name": "srv.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-server-p8.qcow2",
+            "vm_name": "alt-server-p8",
             "disk_size": 30000,
             "disk_cache": "unsafe",
-            "output_directory": "output",
-            "headless": false,
+            "output_directory": "output-qemu",
+            "headless": true,
             "qemuargs": [
                 [ "-m", "2048M" ]
             ],
@@ -38,18 +43,25 @@
             "http_directory": "./",
 
             "boot_wait": "2s",
-            "boot_command": [ "<down><wait>net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata.kvm/ <enter>" ],
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/kvm/",
+                "<wait><enter>"
+            ],
 
             "shutdown_command": "sudo shutdown -P now"
         },
+
         {
+            "name": "srv.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
             "vm_name": "alt-server-p8",
             "disk_size": 30000,
-            "output_directory": "output",
+            "output_directory": "output-vbox",
             "headless": true,
             "keep_registered": false,
+            "guest_additions_mode": "disable",
             "vboxmanage": [
                 ["modifyvm", "{{.Name}}", "--memory", "2048"],
                 ["modifyvm", "{{.Name}}", "--cpus", "1"]
@@ -62,8 +74,8 @@
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
 
-            "ssh_username": "{{ user `ssh_user` }}",
-            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_username": "{{ user `vagrant_user` }}",
+            "ssh_password": "{{ user `vagrant_pass` }}",
             "ssh_wait_timeout": "60m",
             "ssh_pty": true,
 
@@ -71,11 +83,9 @@
 
             "boot_wait": "5s",
             "boot_command": [
-                "<down><wait>",
-                "a<wait>u<wait>t<wait>o<wait>m<wait>a<wait>t<wait>i<wait>c<wait>=<wait>m<wait>e<wait>t<wait>h<wait>o<wait>d<wait>:<wait>h<wait>t<wait>t<wait>p<wait>,<wait>n<wait>e<wait>t<wait>w<wait>o<wait>r<wait>k<wait>:<wait>d<wait>h<wait>c<wait>p<wait>,<wait>s<wait>e<wait>r<wait>v<wait>e<wait>r<wait>:<wait>{{.HTTPIP}},<wait>d<wait>i<wait>r<wait>e<wait>c<wait>t<wait>o<wait>r<wait>y<wait>:<wait>/<wait>d<wait>i<wait>s<wait>t<wait>r<wait> ",
-                "a<wait>i<wait> ",
-                "c<wait>u<wait>r<wait>l<wait>=<wait>h<wait>t<wait>t<wait>p<wait>:<wait>/<wait>/<wait>{{.HTTPIP}}<wait>:<wait>{{.HTTPPort}}/<wait>m<wait>e<wait>t<wait>a<wait>d<wait>a<wait>t<wait>a<wait>.<wait>v<wait>b<wait>o<wait>x<wait>/<wait>",
-                "<enter>"
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/vbox/",
+                "<wait><enter>"
             ],
 
             "shutdown_command": "sudo shutdown -P now",
@@ -85,13 +95,11 @@
             [
                 "--manifest",
                 "--vsys", "0",
-                "--description", "descr",
-                "--version", "0.1.0"
+                "--description", "ALT Server P8 x86_64",
+                "--version", "p8"
             ],
 
             "format": "ova"
-
-
         }
     ],
 
@@ -112,12 +120,19 @@
             "type": "shell",
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
             "inline": [
-                "mv /tmp/rc.apt /etc/rc.d/rc.apt",
+                "mv /tmp/rc.apt /etc/rc.d/scripts/apt-cache-on-tmp",
+                "mv /tmp/rc.local /etc/rc.d/rc.local",
                 "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
-                "/etc/rc.d/rc.apt",
+                "/etc/rc.d/scripts/apt-cache-on-tmp",
                 "apt-get -y update",
-                "apt-get -y dist-upgrade",
-                "apt-get -y clean"
+                "apt-get -y dist-upgrade"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "mkdir -p ${HOME}/.ssh",
+                "curl http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub -o ${HOME}/.ssh/authorized_keys"
             ]
         },
         {
@@ -126,13 +141,33 @@
             "environment_vars": [
                 "SSH_USER='{{user `ssh_user`}}'"
             ],
-            "only": ["virtualbox-iso"]
+            "only": ["srv.vbox"]
+        },
+        {
+            "type": "shell",
+            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
         }
     ],
     "post-processors": [
         {
+            "type": "checksum",
+            "checksum_types": [ "md5", "sha1" ],
+            "output": "results/{{.BuildName}}.{{.ChecksumType}}"
+        },
+        {
             "type": "vagrant",
-            "only": [ "virtualbox-iso" ]
+            "only": [ "srv.vbox" ],
+            "output": "results/{{.BuildName}}.box"
+        },
+        {
+            "type": "compress",
+            "output": "results/{{.BuildName}}.tar.gz",
+            "only": [ "srv.qemu" ]
+        },
+        {
+            "type": "manifest",
+            "output": "results/manifest.json",
+            "strip_path": true
         }
     ]
 }
