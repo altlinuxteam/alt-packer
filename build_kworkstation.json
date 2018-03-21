@@ -1,0 +1,87 @@
+{
+    "variables": {
+        "server_iso_url": "",
+        "server_iso_checksum": "",
+        "server_iso_checksum_type": "",
+
+        "kworkstation-8_iso_url": "",
+        "kworkstation-8_iso_checksum": "",
+        "kworkstation-8_iso_checksum_type": "",
+
+        "ssh_user": "",
+        "ssh_pass": "",
+        "http_port_min": "",
+        "http_port_max": ""
+    },
+
+    "builders": [
+        {
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-kworkstation-p8.qcow2",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output",
+            "headless": false,
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "{{user `kworkstation-8_iso_url`}}",
+            "iso_checksum": "{{user `kworkstation-8_iso_checksum`}}",
+            "iso_checksum_type": "{{user `kworkstation-8_iso_checksum_type`}}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [ "<down><wait>ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata.kw8/ <enter>" ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "fix_sudoers.sh",
+            "environment_vars": [
+                "PASS='{{user `ssh_pass`}}'"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "tmp.cache.conf",
+            "destination": "/tmp/tmp.cache.conf"
+        },
+        {
+            "type": "file",
+            "source": "rc.apt",
+            "destination": "/tmp/rc.apt"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo mv /tmp/rc.apt /etc/rc.d/rc.apt"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo /etc/rc.d/rc.apt"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo apt-get -y update && sudo apt-get -y dist-upgrade"
+        },
+        {
+            "type": "shell",
+            "inline": "sudo apt-get -y clean"
+        }
+    ]
+}

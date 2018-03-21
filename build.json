@@ -1,8 +1,8 @@
 {
     "variables": {
-        "iso_url": "",
-        "iso_checksum": "",
-        "iso_checksum_type": "",
+        "server_iso_url": "",
+        "server_iso_checksum": "",
+        "server_iso_checksum_type": "",
 
         "ssh_user": "",
         "ssh_pass": "",
@@ -23,9 +23,9 @@
                 [ "-m", "2048M" ]
             ],
 
-            "iso_url": "{{user `iso_url`}}",
-            "iso_checksum": "{{user `iso_checksum`}}",
-            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_url": "{{user `server_iso_url`}}",
+            "iso_checksum": "{{user `server_iso_checksum`}}",
+            "iso_checksum_type": "{{user `server_iso_checksum_type`}}",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -38,7 +38,7 @@
             "http_directory": "./",
 
             "boot_wait": "2s",
-            "boot_command": [ "<down><wait>automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata.kvm/ <enter>" ],
+            "boot_command": [ "<down><wait>net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata.kvm/ <enter>" ],
 
             "shutdown_command": "sudo shutdown -P now"
         },
@@ -131,6 +131,12 @@
         {
             "type": "shell",
             "inline": "sudo apt-get -y clean"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "vagrant",
+            "only": [ "virtualbox-iso" ]
         }
     ]
 }

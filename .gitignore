@@ -1,5 +1,7 @@
 distr/
 packer_cache/
-output/
+output*/
 *~
 .#*
+*.iso
+*.box

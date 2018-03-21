@@ -1,7 +1,11 @@
 {
-"iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
-"iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
-"iso_checksum_type": "sha1",
+"server_iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
+"server_iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
+"server_iso_checksum_type": "sha1",
+
+"kworkstation-8_iso_url": "http://mirror.yandex.ru/altlinux/p8/images/kworkstation/alt-kworkstation-8-install-x86_64.iso",
+"kworkstation-8_iso_checksum": "8927d70239d841871fec7aa1e672bf5c34967aa1",
+"kworkstation-8_iso_checksum_type": "sha1",
 
 "ssh_user": "test",
 "ssh_pass": "123",
