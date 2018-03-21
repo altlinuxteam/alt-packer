@@ -48,7 +48,7 @@
             "vm_name": "alt-server-p8",
             "disk_size": 30000,
             "output_directory": "output",
-            "headless": false,
+            "headless": true,
             "keep_registered": false,
             "vboxmanage": [
                 ["modifyvm", "{{.Name}}", "--memory", "2048"],
@@ -98,40 +98,35 @@
     "provisioners": [
         {
             "type": "shell",
-            "script": "fix_sudoers.sh",
+            "script": "scripts/fix_sudoers.sh",
             "environment_vars": [
                 "PASS='{{user `ssh_pass`}}'"
             ]
         },
         {
             "type": "file",
-            "source": "tmp.cache.conf",
-            "destination": "/tmp/tmp.cache.conf"
-        },
-        {
-            "type": "file",
-            "source": "rc.apt",
-            "destination": "/tmp/rc.apt"
+            "source": "scripts/",
+            "destination": "/tmp/"
         },
         {
             "type": "shell",
-            "inline": "sudo mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf"
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "inline": [
+                "mv /tmp/rc.apt /etc/rc.d/rc.apt",
+                "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
+                "/etc/rc.d/rc.apt",
+                "apt-get -y update",
+                "apt-get -y dist-upgrade",
+                "apt-get -y clean"
+            ]
         },
         {
             "type": "shell",
-            "inline": "sudo mv /tmp/rc.apt /etc/rc.d/rc.apt"
-        },
-        {
-            "type": "shell",
-            "inline": "sudo /etc/rc.d/rc.apt"
-        },
-        {
-            "type": "shell",
-            "inline": "sudo apt-get -y update && sudo apt-get -y dist-upgrade"
-        },
-        {
-            "type": "shell",
-            "inline": "sudo apt-get -y clean"
+            "script": "scripts/install-guest-tools.sh",
+            "environment_vars": [
+                "SSH_USER='{{user `ssh_user`}}'"
+            ],
+            "only": ["virtualbox-iso"]
         }
     ],
     "post-processors": [
