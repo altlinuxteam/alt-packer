@@ -79,6 +79,7 @@
             ],
 
             "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
 
             "export_opts":
             [
