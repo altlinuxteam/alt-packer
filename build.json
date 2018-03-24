@@ -1,17 +1,9 @@
 {
     "variables": {
-        "server_iso_url": "",
-        "server_iso_checksum": "",
-        "server_iso_checksum_type": "",
-
-        "ssh_user": "",
-        "ssh_pass": "",
-
-        "vagrant_user": "",
-        "vagrant_pass": "",
-
-        "http_port_min": "",
-        "http_port_max": ""
+        "target": "{{env `PACKER_TARGET`}}",
+        "version": "{{env `PACKER_VERSION`}}",
+        "arch": "{{env `PACKER_ARCH`}}",
+        "headless": "{{env `PACKER_HEADLESS`}}"
     },
 
     "builders": [
@@ -22,15 +14,16 @@
             "vm_name": "alt-server-p8",
             "disk_size": 30000,
             "disk_cache": "unsafe",
-            "output_directory": "output-qemu",
-            "headless": true,
+            "output_directory": "output-srv.qemu",
+            "headless": "{{user `headless`}}",
             "qemuargs": [
                 [ "-m", "2048M" ]
             ],
 
-            "iso_url": "{{user `server_iso_url`}}",
-            "iso_checksum": "{{user `server_iso_checksum`}}",
-            "iso_checksum_type": "{{user `server_iso_checksum_type`}}",
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -58,8 +51,8 @@
             "guest_os_type": "Linux_64",
             "vm_name": "alt-server-p8",
             "disk_size": 30000,
-            "output_directory": "output-vbox",
-            "headless": true,
+            "output_directory": "output-srv.vbox",
+            "headless": "{{user `headless`}}",
             "keep_registered": false,
             "guest_additions_mode": "disable",
             "vboxmanage": [
@@ -67,9 +60,10 @@
                 ["modifyvm", "{{.Name}}", "--cpus", "1"]
             ],
 
-            "iso_url": "http://mirror.yandex.ru/altlinux/p8/images/server/alt-8-server-x86_64.iso",
-            "iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
-            "iso_checksum_type": "sha1",
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -100,6 +94,80 @@
             ],
 
             "format": "ova"
+        },
+
+        {
+            "name": "kws.qemu",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-kworkstation-p8",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output-kw",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/kvm/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
+            "name": "ws.qemu",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-workstation-p8",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output-w",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/kvm/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
         }
     ],
 
@@ -125,7 +193,11 @@
                 "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
                 "/etc/rc.d/scripts/apt-cache-on-tmp",
                 "apt-get -y update",
-                "apt-get -y dist-upgrade"
+                "apt-get -y dist-upgrade",
+                "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
+                "systemctl enable qemu-guest-agent",
+                "systemctl disable cloud-init",
+                "cd /etc/net/ifaces/; rm -rf ens3; for i in $(seq 1 8); do ln -s eth0 eth$i; done"
             ]
         },
         {
@@ -133,7 +205,15 @@
             "inline": [
                 "mkdir -p ${HOME}/.ssh",
                 "curl http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub -o ${HOME}/.ssh/authorized_keys"
-            ]
+            ],
+            "only": ["srv.vbox"]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo curl http://${PACKER_HTTP_ADDR}/pubkeys/robot.pub -o /etc/openssh/authorized_keys/root"
+            ],
+            "only": ["srv.qemu"]
         },
         {
             "type": "shell",
@@ -162,7 +242,7 @@
         {
             "type": "compress",
             "output": "results/{{.BuildName}}.tar.gz",
-            "only": [ "srv.qemu" ]
+            "only": [ "srv.qemu", "kws.qemu", "ws.qemu" ]
         },
         {
             "type": "manifest",
