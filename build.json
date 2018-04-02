@@ -196,8 +196,7 @@
                 "apt-get -y dist-upgrade",
                 "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
                 "systemctl enable qemu-guest-agent",
-                "systemctl disable cloud-init",
-                "cd /etc/net/ifaces/; rm -rf ens3; for i in $(seq 1 8); do ln -s eth0 eth$i; done"
+                "systemctl disable cloud-init"
             ]
         },
         {
