@@ -1,0 +1,11 @@
+SYBSYSTEM!="net", GOTO="net_hotplug_end"
+
+IMPORT{builtin}="path_id"
+
+ACTION!="add", GOTO="net_hotplug_end"
+
+IMPORT{builtin}="net_setup_link"
+
+RUN+="/sbin/service network restart"
+
+LABEL="net_hotplug_end"

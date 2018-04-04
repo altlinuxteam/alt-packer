@@ -11,7 +11,7 @@
             "name": "srv.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-server-p8",
+            "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-srv.qemu",
@@ -49,7 +49,7 @@
             "name": "srv.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "alt-server-p8",
+            "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "output_directory": "output-srv.vbox",
             "headless": "{{user `headless`}}",
@@ -100,7 +100,7 @@
             "name": "kws.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-kworkstation-p8",
+            "vm_name": "alt-kworkstation-{{user `version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-kw",
@@ -137,7 +137,7 @@
             "name": "ws.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-workstation-p8",
+            "vm_name": "alt-workstation-{{user `version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-w",
@@ -186,14 +186,21 @@
         },
         {
             "type": "shell",
+            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
+        },
+        {
+            "type": "shell",
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
             "inline": [
                 "mv /tmp/rc.apt /etc/rc.d/scripts/apt-cache-on-tmp",
                 "mv /tmp/rc.local /etc/rc.d/rc.local",
                 "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
                 "/etc/rc.d/scripts/apt-cache-on-tmp",
+                "apt-get clean",
                 "apt-get -y update",
-                "apt-get -y dist-upgrade",
+                "apt-get -y dist-upgrade || apt-get dist-upgrade -y --fix-broken",
+                "apt-get clean",
+                "apt-get -y update",
                 "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
                 "systemctl enable qemu-guest-agent",
                 "systemctl disable cloud-init"
@@ -212,7 +219,14 @@
             "inline": [
                 "sudo curl http://${PACKER_HTTP_ADDR}/pubkeys/robot.pub -o /etc/openssh/authorized_keys/root"
             ],
-            "only": ["srv.qemu"]
+            "only": ["srv.qemu", "kws.qemu", "ws.qemu"]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "mkdir -p ${HOME}/.ssh",
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/81-net-hotplug.rules -o /etc/udev/rules.d/81-net-hotplug.rules"
+            ]
         },
         {
             "type": "shell",
@@ -221,10 +235,6 @@
                 "SSH_USER='{{user `ssh_user`}}'"
             ],
             "only": ["srv.vbox"]
-        },
-        {
-            "type": "shell",
-            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
         }
     ],
     "post-processors": [
