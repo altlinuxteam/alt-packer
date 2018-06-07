@@ -50,7 +50,7 @@
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
             "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 30000,
+            "disk_size": 3000,
             "output_directory": "output-srv.vbox",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
@@ -101,7 +101,7 @@
             "type": "qemu",
             "accelerator": "kvm",
             "vm_name": "alt-kworkstation-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 30000,
+            "disk_size": 3000,
             "disk_cache": "unsafe",
             "output_directory": "output-kw",
             "headless": "{{user `headless`}}",
@@ -134,13 +134,65 @@
         },
 
         {
+            "name": "kws.vbox",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
+            "vm_name": "alt-kworkstaion-{{user `version`}}-{{user `arch`}}",
+            "disk_size": 3000,
+            "output_directory": "output-kw.vbox",
+            "headless": "{{user `headless`}}",
+            "keep_registered": false,
+            "guest_additions_mode": "disable",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "2048"],
+                ["modifyvm", "{{.Name}}", "--cpus", "1"]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `vagrant_user` }}",
+            "ssh_password": "{{ user `vagrant_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/vbox/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "ALT Server P8 x86_64",
+                "--version", "p8"
+            ],
+
+            "format": "ova"
+        },
+
+
+        {
             "name": "ws.qemu",
             "type": "qemu",
             "accelerator": "kvm",
             "vm_name": "alt-workstation-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 30000,
+            "disk_size": 3000,
             "disk_cache": "unsafe",
-            "output_directory": "output-w",
+            "output_directory": "output-ws",
             "headless": "{{user `headless`}}",
             "qemuargs": [
                 [ "-m", "2048M" ]
@@ -168,7 +220,59 @@
             ],
 
             "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
+            "name": "ws.vbox",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
+            "vm_name": "alt-workstaion-{{user `version`}}-{{user `arch`}}",
+            "disk_size": 3000,
+            "output_directory": "output-ws.vbox",
+            "headless": "{{user `headless`}}",
+            "keep_registered": false,
+            "guest_additions_mode": "disable",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "2048"],
+                ["modifyvm", "{{.Name}}", "--cpus", "1"]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `vagrant_user` }}",
+            "ssh_password": "{{ user `vagrant_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/vbox/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "ALT Server P8 x86_64",
+                "--version", "p8"
+            ],
+
+            "format": "ova"
         }
+
     ],
 
     "provisioners": [
@@ -186,7 +290,13 @@
         },
         {
             "type": "shell",
-            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
+            "script": "scripts/disable_repos.sh"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru.list -o /etc/apt/sources.list.d/srt.basealt.ru.list"
+            ]
         },
         {
             "type": "shell",
@@ -198,9 +308,7 @@
                 "/etc/rc.d/scripts/apt-cache-on-tmp",
                 "apt-get clean",
                 "apt-get -y update",
-                "apt-get -y dist-upgrade || apt-get dist-upgrade -y --fix-broken",
-                "apt-get clean",
-                "apt-get -y update",
+                "apt-get -y dist-upgrade",
                 "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
                 "systemctl enable qemu-guest-agent",
                 "systemctl disable cloud-init"
@@ -208,11 +316,15 @@
         },
         {
             "type": "shell",
+            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
+        },
+        {
+            "type": "shell",
             "inline": [
                 "mkdir -p ${HOME}/.ssh",
                 "curl http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub -o ${HOME}/.ssh/authorized_keys"
             ],
-            "only": ["srv.vbox"]
+            "only": ["srv.vbox", "kws.vbox", "ws.vbox"]
         },
         {
             "type": "shell",
@@ -230,11 +342,19 @@
         },
         {
             "type": "shell",
+            "inline": [
+                "sudo rm -rf /etc/net/ifaces/ens3",
+                "sudo sed -i 's/ALLOW_UNKNOWN=off/ALLOW_UNKNOWN=yes/' /etc/net/options.d/50-ALTLinux-server"
+            ],
+            "only": ["srv.qemu"]
+        },
+        {
+            "type": "shell",
             "script": "scripts/install-guest-tools.sh",
             "environment_vars": [
                 "SSH_USER='{{user `ssh_user`}}'"
             ],
-            "only": ["srv.vbox"]
+            "only": ["srv.vbox", "kws.vbox", "ws.vbox"]
         }
     ],
     "post-processors": [
@@ -245,7 +365,7 @@
         },
         {
             "type": "vagrant",
-            "only": [ "srv.vbox" ],
+            "only": [ "srv.vbox", "kws.vbox", "ws.vbox" ],
             "output": "results/{{.BuildName}}.box"
         },
         {

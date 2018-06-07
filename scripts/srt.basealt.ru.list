@@ -1,0 +1,3 @@
+rpm [p8] http://10.44.0.200/ p8/branch/x86_64 classic
+rpm [p8] http://10.44.0.200/ p8/branch/x86_64-i586 classic
+rpm [p8] http://10.44.0.200/ p8/branch/noarch classic
