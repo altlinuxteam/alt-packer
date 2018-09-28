@@ -1,0 +1,3 @@
+rpm [alt] http://10.64.0.6/sisyphus Sisyphus/x86_64 classic
+rpm [alt] http://10.64.0.6/sisyphus Sisyphus/x86_64-i586 classic
+rpm [alt] http://10.64.0.6/sisyphus Sisyphus/noarch classic

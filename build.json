@@ -3,7 +3,8 @@
         "target": "{{env `PACKER_TARGET`}}",
         "version": "{{env `PACKER_VERSION`}}",
         "arch": "{{env `PACKER_ARCH`}}",
-        "headless": "{{env `PACKER_HEADLESS`}}"
+        "headless": "{{env `PACKER_HEADLESS`}}",
+        "apt_sources": "{{env `PACKER_APT_SOURCES`}}"
     },
 
     "builders": [
@@ -50,7 +51,7 @@
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
             "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 3000,
+            "disk_size": 30000,
             "output_directory": "output-srv.vbox",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
@@ -101,7 +102,7 @@
             "type": "qemu",
             "accelerator": "kvm",
             "vm_name": "alt-kworkstation-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 3000,
+            "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-kw",
             "headless": "{{user `headless`}}",
@@ -138,7 +139,7 @@
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
             "vm_name": "alt-kworkstaion-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 3000,
+            "disk_size": 30000,
             "output_directory": "output-kw.vbox",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
@@ -177,7 +178,7 @@
             [
                 "--manifest",
                 "--vsys", "0",
-                "--description", "ALT Server P8 x86_64",
+                "--description", "ALT KWorkstation P8 x86_64",
                 "--version", "p8"
             ],
 
@@ -190,7 +191,7 @@
             "type": "qemu",
             "accelerator": "kvm",
             "vm_name": "alt-workstation-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 3000,
+            "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-ws",
             "headless": "{{user `headless`}}",
@@ -227,7 +228,7 @@
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
             "vm_name": "alt-workstaion-{{user `version`}}-{{user `arch`}}",
-            "disk_size": 3000,
+            "disk_size": 30000,
             "output_directory": "output-ws.vbox",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
@@ -266,7 +267,7 @@
             [
                 "--manifest",
                 "--vsys", "0",
-                "--description", "ALT Server P8 x86_64",
+                "--description", "ALT Workstation P8 x86_64",
                 "--version", "p8"
             ],
 
@@ -295,7 +296,7 @@
         {
             "type": "shell",
             "inline": [
-                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru.list -o /etc/apt/sources.list.d/srt.basealt.ru.list"
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru-{{user `apt_sources`}}-{{user `arch`}}.list -o /etc/apt/sources.list.d/srt.basealt.ru-{{user `apt_sources`}}-{{user `arch`}}.list"
             ]
         },
         {

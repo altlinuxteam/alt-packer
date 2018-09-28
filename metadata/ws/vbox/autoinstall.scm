@@ -15,7 +15,7 @@
 ("/grub" action "write" device "/dev/sda" passwd #f passwd_1 "*" passwd_2 "*")
 
 ("/net-eth" action "write" reset #t)
-("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" search "" dns "" computer_name "template" ipv_enabled #t)
+("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" search "" dns "" computer_name "template" ipv_enabled #t)
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
