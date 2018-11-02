@@ -1,5 +1,7 @@
 {
     "iso_url": "http://mirror.yandex.ru/altlinux/p8/images/kworkstation/alt-kworkstation-8.2-install-x86_64.iso",
     "iso_checksum": "8927d70239d841871fec7aa1e672bf5c34967aa1",
-    "iso_checksum_type": "sha1"
+    "iso_checksum_type": "sha1",
+	"iso_address": "10.64.0.6",
+    "iso_dir": "/iso/alt-kworkstation-8-install-x86_64/"
 }
