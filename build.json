@@ -1,5 +1,6 @@
 {
     "variables": {
+        "packer_cache_dir": "{{env `PACKER_CACHE_DIR`}}",
         "target": "{{env `PACKER_TARGET`}}",
         "version": "{{env `PACKER_VERSION`}}",
         "arch": "{{env `PACKER_ARCH`}}",
@@ -24,7 +25,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -38,9 +39,9 @@
 
             "boot_wait": "2s",
             "boot_command": [
-                "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/kvm/",
-                "<wait><enter>"
+		"<esc><wait><enter><wait>",
+		"alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/kvm/",
+		"<wait><enter>"
             ],
 
             "shutdown_command": "sudo shutdown -P now"
@@ -64,7 +65,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -79,7 +80,7 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/vbox/",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/vbox/",
                 "<wait><enter>"
             ],
 
@@ -113,7 +114,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "ssh_username": "{{ user `ssh_user` }}",
             "ssh_password": "{{ user `ssh_pass` }}",
@@ -127,7 +128,7 @@
             "boot_wait": "2s",
             "boot_command": [
                 "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/kvm/",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/kvm/",
                 "<wait><enter>"
             ],
 
@@ -152,7 +153,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -167,7 +168,7 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/vbox/",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/vbox/",
                 "<wait><enter>"
             ],
 
@@ -202,7 +203,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "ssh_username": "{{ user `ssh_user` }}",
             "ssh_password": "{{ user `ssh_pass` }}",
@@ -216,7 +217,7 @@
             "boot_wait": "2s",
             "boot_command": [
                 "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/kvm/",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/kvm/",
                 "<wait><enter>"
             ],
 
@@ -241,7 +242,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "packer_cache/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -256,7 +257,7 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<esc><wait><enter><wait>",
-                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/vbox/",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/vbox/",
                 "<wait><enter>"
             ],
 
@@ -356,6 +357,12 @@
                 "SSH_USER='{{user `ssh_user`}}'"
             ],
             "only": ["srv.vbox", "kws.vbox", "ws.vbox"]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo rm -f /etc/openssh/ssh_host_*"
+            ]
         }
     ],
     "post-processors": [
