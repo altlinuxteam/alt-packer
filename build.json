@@ -2,10 +2,10 @@
     "variables": {
         "packer_cache_dir": "{{env `PACKER_CACHE_DIR`}}",
         "target": "{{env `PACKER_TARGET`}}",
-        "version": "{{env `PACKER_VERSION`}}",
+        "base_version": "{{env `PACKER_BASE_VERSION`}}",
         "arch": "{{env `PACKER_ARCH`}}",
         "headless": "{{env `PACKER_HEADLESS`}}",
-        "apt_sources": "{{env `PACKER_APT_SOURCES`}}"
+        "target_version": "{{env `PACKER_TARGET_VERSION`}}"
     },
 
     "builders": [
@@ -13,7 +13,7 @@
             "name": "srv.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-server-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-srv.qemu",
@@ -25,7 +25,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -51,7 +51,7 @@
             "name": "srv.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "alt-server-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-server-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "output_directory": "output-srv.vbox",
             "headless": "{{user `headless`}}",
@@ -65,7 +65,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -92,7 +92,7 @@
                 "--manifest",
                 "--vsys", "0",
                 "--description", "ALT Server P8 x86_64",
-                "--version", "p8"
+                "--version", "{{ user `target_version` }}"
             ],
 
             "format": "ova"
@@ -102,7 +102,7 @@
             "name": "kws.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-kworkstation-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-kworkstation-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-kw",
@@ -114,7 +114,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "ssh_username": "{{ user `ssh_user` }}",
             "ssh_password": "{{ user `ssh_pass` }}",
@@ -139,7 +139,7 @@
             "name": "kws.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "alt-kworkstaion-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-kworkstaion-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "output_directory": "output-kw.vbox",
             "headless": "{{user `headless`}}",
@@ -153,7 +153,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -180,7 +180,7 @@
                 "--manifest",
                 "--vsys", "0",
                 "--description", "ALT KWorkstation P8 x86_64",
-                "--version", "p8"
+                "--version", "{{ user `target_varsion` }}"
             ],
 
             "format": "ova"
@@ -191,7 +191,7 @@
             "name": "ws.qemu",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "alt-workstation-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-workstation-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "output_directory": "output-ws",
@@ -203,7 +203,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "ssh_username": "{{ user `ssh_user` }}",
             "ssh_password": "{{ user `ssh_pass` }}",
@@ -228,7 +228,7 @@
             "name": "ws.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "alt-workstaion-{{user `version`}}-{{user `arch`}}",
+            "vm_name": "alt-workstaion-{{user `target_version`}}-{{user `arch`}}",
             "disk_size": 30000,
             "output_directory": "output-ws.vbox",
             "headless": "{{user `headless`}}",
@@ -242,7 +242,7 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -269,7 +269,7 @@
                 "--manifest",
                 "--vsys", "0",
                 "--description", "ALT Workstation P8 x86_64",
-                "--version", "p8"
+                "--version", "{{ user `target_version` }}"
             ],
 
             "format": "ova"
@@ -297,7 +297,7 @@
         {
             "type": "shell",
             "inline": [
-                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru-{{user `apt_sources`}}-{{user `arch`}}.list -o /etc/apt/sources.list.d/srt.basealt.ru-{{user `apt_sources`}}-{{user `arch`}}.list"
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru-{{user `target_version`}}-{{user `arch`}}.list -o /etc/apt/sources.list.d/srt.basealt.ru-{{user `target_version`}}-{{user `arch`}}.list"
             ]
         },
         {
