@@ -308,10 +308,10 @@
                 "mv /tmp/rc.local /etc/rc.d/rc.local",
                 "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
                 "/etc/rc.d/scripts/apt-cache-on-tmp",
-                "apt-get clean",
-                "apt-get -y update",
-                "apt-get -y dist-upgrade",
-                "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
+                "apt-get -q clean",
+                "apt-get -qy update",
+                "apt-get -qy dist-upgrade",
+                "apt-get install -qy qemu-guest-agent cloud-init udev-rule-generator-net",
                 "systemctl enable qemu-guest-agent",
                 "systemctl disable cloud-init"
             ]
