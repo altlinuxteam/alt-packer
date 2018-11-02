@@ -292,6 +292,16 @@
         },
         {
             "type": "shell",
+            "script": "scripts/disable_repos.sh"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/srt.basealt.ru-{{user `base_version`}}-{{user `arch`}}.list -o /etc/apt/sources.list.d/srt.basealt.ru-{{user `base_version`}}-{{user `arch`}}.list"
+            ]
+        },
+        {
+            "type": "shell",
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
             "inline": [
                 "apt-get -qy update && apt-get -qy upgrade"
