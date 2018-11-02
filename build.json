@@ -292,14 +292,14 @@
         },
         {
             "type": "shell",
-            "script": "scripts/disable_repos.sh"
-        },
-        {
-            "type": "shell",
             "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
             "inline": [
                 "apt-get -qy update && apt-get -qy upgrade"
             ]
+        },
+        {
+            "type": "shell",
+            "script": "scripts/disable_repos.sh"
         },
         {
             "type": "shell",
