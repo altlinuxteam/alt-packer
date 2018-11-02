@@ -310,6 +310,7 @@
                 "/etc/rc.d/scripts/apt-cache-on-tmp",
                 "apt-get -q clean",
                 "apt-get -qy update",
+                "apt-get -qy upgrade",
                 "apt-get -qy dist-upgrade",
                 "apt-get install -qy qemu-guest-agent cloud-init udev-rule-generator-net",
                 "systemctl enable qemu-guest-agent",
