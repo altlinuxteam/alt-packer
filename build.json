@@ -19,7 +19,7 @@
             "output_directory": "output-srv.qemu",
             "headless": "{{user `headless`}}",
             "qemuargs": [
-                [ "-m", "2048M" ]
+                [ "-m", "4096M" ]
             ],
 
             "iso_url": "{{user `iso_url`}}",
@@ -108,7 +108,7 @@
             "output_directory": "output-kw",
             "headless": "{{user `headless`}}",
             "qemuargs": [
-                [ "-m", "2048M" ]
+                [ "-m", "4096M" ]
             ],
 
             "iso_url": "{{user `iso_url`}}",
@@ -197,7 +197,7 @@
             "output_directory": "output-ws",
             "headless": "{{user `headless`}}",
             "qemuargs": [
-                [ "-m", "2048M" ]
+                [ "-m", "4096M" ]
             ],
 
             "iso_url": "{{user `iso_url`}}",
