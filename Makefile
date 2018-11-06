@@ -40,6 +40,6 @@ alt-workstation:
 
 srv: alt-server
 
-kw: alt-kworkstation
+kws: alt-kworkstation
 
 ws: alt-workstation
