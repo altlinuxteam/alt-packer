@@ -1,0 +1,212 @@
+{
+    "variables": {
+        "target": "{{env `PACKER_TARGET`}}",
+        "version": "{{env `PACKER_VERSION`}}",
+        "arch": "{{env `PACKER_ARCH`}}",
+        "headless": "{{env `PACKER_HEADLESS`}}",
+        "apt_sources": "{{env `PACKER_APT_SOURCES`}}"
+    },
+
+    "builders": [
+        {
+            "name": "qemu.8sp-ws",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "qemu.8sp-ws",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "qemu.alt-workstation-8sp-x86_64",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `iso_target_path`}}",
+
+            "ssh_username": "{{user `ssh_user`}}",
+            "ssh_password": "{{user `ssh_pass`}}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "disk_interface": "virtio-scsi",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz ",
+                  "initrd=alt0/full.cz ",
+                  "changedisk ",
+                  "ramdisk_size=239301 ",
+                  "lang=ru_RU ",
+                  "noeject ",
+                  "quiet=1 ",
+                  "showopts ",
+                  "net.ifnames=0 ",
+                  "selinux=0 ",
+                  "automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/8sp-workstation/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
+            "name": "vbox.8sp-ws",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
+            "vm_name": "vbox.8sp-ws",
+            "disk_size": 30000,
+            "output_directory": "vbox.alt-workstation-8sp-x86_64",
+            "headless": "{{user `headless`}}",
+            "keep_registered": false,
+            "guest_additions_mode": "disable",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "2048"],
+                ["modifyvm", "{{.Name}}", "--cpus", "1"],
+                ["modifyvm", "{{.Name}}", "--clipboard", "bidirectional"]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "packer_cache/{{user `iso_target_path`}}",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `vagrant_user` }}",
+            "ssh_password": "{{ user `vagrant_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz ",
+                  "initrd=alt0/full.cz ",
+                  "changedisk ",
+                  "ramdisk_size=239301 ",
+                  "lang=ru_RU ",
+                  "noeject ",
+                  "quiet=1 ",
+                  "showopts ",
+                  "net.ifnames=0 ",
+                  "selinux=0 ",
+                  "automatic=method:http,network:dhcp,server:{{.HTTPIP}},directory:/distr ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/8sp-workstation/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "ALT 8 SP Workstation x86_64",
+                "--version", "c8"
+            ],
+
+            "format": "ova"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/fix_sudoers.sh",
+            "environment_vars": [
+                "PASS='{{user `ssh_pass`}}'"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "scripts/",
+            "destination": "/tmp/"
+        },
+        {
+            "type": "shell",
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "inline": [
+                "mv /tmp/rc.apt /etc/rc.d/scripts/apt-cache-on-tmp",
+                "mv /tmp/rc.local /etc/rc.d/rc.local",
+                "mv /tmp/tmp.cache.conf /etc/apt/apt.conf.d/tmp.cache.conf",
+                "/etc/rc.d/scripts/apt-cache-on-tmp",
+                "apt-get clean",
+                "apt-get -y update",
+                "apt-get -y dist-upgrade",
+                "apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net",
+                "systemctl enable qemu-guest-agent",
+                "systemctl disable cloud-init"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": "sudo rm -f /etc/apt/sources.list.d/sources.installer.list"
+        },
+        {
+            "type": "shell",
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "inline": [
+                "mkdir -p /home/vagrant/.ssh",
+                "curl http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub -o /home/vagrant/.ssh/authorized_keys",
+                "chown -Rv vagrant:vagrant /home/vagrant"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo curl http://${PACKER_HTTP_ADDR}/pubkeys/robot.pub -o /etc/openssh/authorized_keys/root"
+            ],
+            "only": ["qemu.8sp-ws"]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "mkdir -p ${HOME}/.ssh",
+                "sudo curl http://${PACKER_HTTP_ADDR}/scripts/81-net-hotplug.rules -o /etc/udev/rules.d/81-net-hotplug.rules"
+            ]
+        },
+        {
+            "type": "shell",
+            "script": "scripts/install-guest-tools.sh",
+            "environment_vars": [
+                "SSH_USER='{{user `ssh_user`}}'"
+            ],
+            "only": ["vbox.8sp-ws"]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "checksum",
+            "checksum_types": [ "md5", "sha1" ],
+            "output": "results/{{.BuildName}}.{{.ChecksumType}}"
+        },
+        {
+            "type": "vagrant",
+            "output": "results/{{.BuildName}}.box",
+            "only": ["vbox.8sp-ws"]
+        },
+        {
+            "type": "compress",
+            "output": "results/{{.BuildName}}.tar.gz",
+            "only": ["qemu.8sp-ws"]
+        },
+        {
+            "type": "manifest",
+            "output": "results/manifest.json",
+            "strip_path": true
+        }
+    ]
+}
+
