@@ -8,3 +8,8 @@ results/
 *.iso
 *.box
 *.checksum
+*.retry
+qemu.*
+vbox.*
+packer_cache
+
