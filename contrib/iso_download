@@ -1,0 +1,134 @@
+#! /bin/sh
+
+# Script to download ISO file using builder configuration provided
+# in Packer's JSON.
+
+set -euo pipefail
+
+packer_cache_dir="$(pwd)/packer_cache"
+
+# The problem which this script may cause is files which download were
+# not finished. This function is needed to remove this files and it
+# takes two arguments:
+# $1 - file name to cleanup
+# $2 - signal ID
+exit_cleanup() {
+	broken_file="${1}"
+
+	echo "Caught signal"
+	echo "Removing broken image: ${broken_file}"
+	rm -f "${broken_file}"
+}
+
+# jq command wrapper to edit its options in one place to preserve
+# call consistency.
+jq_cmd() {
+	opts="${1}"
+	file="${2}"
+
+	jq -r "${opts}" "${file}"
+}
+
+# Read URL of the image to download from configuration file
+get_iso_url() {
+	file="${1}"
+
+	url=$(jq_cmd '.iso_url' "${file}")
+	echo "${url}"
+
+	return 0
+}
+
+# Read SHA1 hash sum of image to download from config
+get_checksum() {
+	file="${1}"
+
+	checksum=$(jq_cmd '.iso_checksum' "${file}")
+	echo "${checksum}"
+
+	return 0
+}
+
+# Read local ISO file name from config
+get_download_target() {
+	file="${1}"
+
+	target=$(jq_cmd '.iso_target_path' "${file}")
+	echo "${target}"
+
+	return 0
+}
+
+# Verify checksum for file provided. Takes two arguments:
+# $1 - filename
+# $2 - checksum
+verify_sha1() {
+	test_file="${1}"
+	file_checksum="${2}"
+	real_hash=""
+
+	# Some systems may have 'sha1' command instead of 'sha1sum'
+	if command -v sha1 2>/dev/null; then
+		real_hash=$(sha1 "${test_file}" | awk '{ print $1 }')
+	else
+		real_hash=$(sha1sum "${test_file}" | awk '{ print $1 }')
+	fi
+
+	if test "${real_hash}" != "${file_checksum}"; then
+		echo "Checksum error for ${test_file}:${file_checksum}"
+		echo "The real checksum is: ${real_hash}"
+		return 1
+	fi
+
+	return 0
+}
+
+# Download ISO from URL to local file if missing
+# Takes three parameters:
+# $1 - ISO URL
+# $2 - target file name
+# $3 - SHA1 checksum
+download_if_missing() {
+	source_url="${1}"
+	target_file="${2}"
+	sha1_hash="${3}"
+
+	if ! test -e "${target_file}"; then
+		echo "Downloading ${target_file}"
+		curl -sS -o "${target_file}" "${source_url}" || (retcode=$?; echo "Error downloading ${target_file}: ${retcode}"; return ${retcode})
+	else
+		echo "File ${target_file} is already downloaded"
+	fi
+
+	verify_sha1 "${target_file}" "${sha1_hash}" || (retcode=$?; echo "Checksum mismatch for ${target_file}:${sha1_hash}"; return ${retcode})
+
+	return 0
+}
+
+# Takes one argument:
+# $1 - Path to ISO configuration file stored in JSON
+main() {
+	json_config="empty"
+	if test -e "${1}"; then
+		json_config="${1}"
+		echo "Working with configuration file: ${json_config}"
+	else
+		echo "Configuration file does not exist: ${1}"
+		exit 1
+	fi
+
+	url=$(get_iso_url "${json_config}")
+	checksum=$(get_checksum "${json_config}")
+	target=$(get_download_target "${json_config}")
+
+	# The signal handler has meaning only to cleanup on broken
+	# downloads
+	for sig in SIGINT SIGTERM SIGHUP SIGQUIT; do
+		trap "exit_cleanup ${packer_cache_dir}/${target}" $sig
+	done
+
+	download_if_missing "${url}" "${packer_cache_dir}/${target}" "${checksum}"
+}
+
+main "${1}"
+
