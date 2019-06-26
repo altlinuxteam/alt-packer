@@ -48,6 +48,44 @@
         },
 
         {
+            "name": "srv.onebula",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-server-{{user `target_version`}}-{{user `arch`}}",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output-srv.qemu",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "4096M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+		"<esc><wait><enter><wait>",
+		"alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/srv/kvm/",
+		"<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
             "name": "srv.vbox",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
@@ -96,6 +134,43 @@
             ],
 
             "format": "ova"
+        },
+
+        {
+            "name": "kws.onebula",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-kworkstation-{{user `target_version`}}-{{user `arch`}}",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output-kw",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "4096M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/kws/kvm/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
         },
 
         {
@@ -186,6 +261,43 @@
             "format": "ova"
         },
 
+
+        {
+            "name": "ws.onebula",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "alt-workstation-{{user `target_version`}}-{{user `arch`}}",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "output-ws",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "4096M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "alt0/vmlinuz initrd=alt0/full.cz changedisk ramdisk_size=239301 lang=ru_RU noeject quiet=1 showopts net.ifnames=0 automatic=method:http,network:dhcp,server:{{user `iso_address`}},directory:{{user `iso_dir`}} ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/ws/kvm/",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
 
         {
             "name": "ws.qemu",
@@ -316,6 +428,20 @@
                 "systemctl enable qemu-guest-agent",
                 "systemctl disable cloud-init"
             ]
+        },
+        {
+            "type": "shell",
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "inline": [
+				"apt-get install -y opennebula-context",
+				"apt-get install -y systemd-networkd",
+				"apt-get remove -y etcnet",
+				"rm -rf /etc/net",
+				"systemctl enable one-context",
+				"systemctl enable systemd-networkd",
+				"ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules"
+            ],
+            "only": ["srv.onebula", "kws.onebula", "ws.onebula"]
         },
         {
             "type": "shell",
