@@ -27,34 +27,12 @@ class Renderer(renderer.Renderer):
         self.dns_path = config.get('dns_path', 'etc/net/ifaces/lo/resolv.conf')
 
     @classmethod
-    def _render_physical_interfaces(cls, network_state, iface_contents):
-        physical_filter = renderer.filter_by_physical
-        for iface in network_state.iter_interfaces(physical_filter):
-            iface_name = iface['name']
-            iface_cfg = iface_contents[iface_name]
-            route_cfg = iface_cfg.routes
-            subnets = iface.get("subnets", [])
-            res = {}
-
-    @staticmethod
-    def _render_dns(network_state, existing_dns_path=None):
-        content = resolv_conf.ResolvConf("")
-        if existing_dns_path and os.path.isfile(existing_dns_path):
-            content = resolv_conf.ResolvConf(util.load_file(existing_dns_path))
-        for nameserver in network_state.dns_nameservers:
-            content.add_nameserver(nameserver)
-        for searchdomain in network_state.dns_searchdomains:
-            content.add_search_domain(searchdomain)
-        return "\n".join([_make_header(';'), str(content)])
-
-
-    @classmethod
     def _render_etcnet(cls, base_etcnet_dir, network_state):
         '''Given state, return /etc/net files + contents'''
         options_path = "%(base)s/%(name)s/options"
         ipv4_path    = "%(base)s/%(name)s/ipv4address"
         ipv4r_path   = "%(base)s/%(name)s/ipv4route"
-        resolv_path  = "%(base)s/lo/resolv.conf"
+        resolv_path  = "%(base)s/eth0/resolv.conf"
 
         nameservers = network_state.dns_nameservers
         searchdomains = network_state.dns_searchdomains
