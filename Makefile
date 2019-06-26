@@ -7,6 +7,7 @@ headless = true
 TARGET_VERSION := 8.2
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 VM_TYPE := qemu
+net_init =
 
 alt-server:
 	PACKER_CACHE_DIR="$(PACKER_CACHE_DIR)" \
@@ -16,6 +17,7 @@ alt-server:
 	PACKER_HEADLESS="$(headless)" \
 	PACKER_LOG=1 \
 	PACKER_TARGET_VERSION="$(TARGET_VERSION)" \
+        PACKER_NET_INIT="$(net_init)" \
 	$(packer_bin) build -var-file=config/$@-$(BASE_VERSION)-$(arch).json -var-file=config/common.json -only=srv.$(VM_TYPE) build.json
 
 alt-kworkstation:
@@ -26,6 +28,7 @@ alt-kworkstation:
 	PACKER_HEADLESS="$(headless)" \
 	PACKER_LOG=1 \
 	PACKER_TARGET_VERSION="$(TARGET_VERSION)" \
+        PACKER_NET_INIT="$(net_init)" \
 	$(packer_bin) build -var-file=config/$@-$(BASE_VERSION)-$(arch).json -var-file=config/common.json -only=kws.$(VM_TYPE) build.json
 
 alt-workstation:
@@ -36,6 +39,7 @@ alt-workstation:
 	PACKER_HEADLESS="$(headless)" \
 	PACKER_LOG=1 \
 	PACKER_TARGET_VERSION="$(TARGET_VERSION)" \
+        PACKER_NET_INIT="$(net_init)" \
 	$(packer_bin) build -var-file=config/$@-$(BASE_VERSION)-$(arch).json -var-file=config/common.json -only=ws.$(VM_TYPE) build.json
 
 srv: alt-server

@@ -5,7 +5,9 @@
         "base_version": "{{env `PACKER_BASE_VERSION`}}",
         "arch": "{{env `PACKER_ARCH`}}",
         "headless": "{{env `PACKER_HEADLESS`}}",
-        "target_version": "{{env `PACKER_TARGET_VERSION`}}"
+        "target_version": "{{env `PACKER_TARGET_VERSION`}}",
+        "apt_sources": "{{env `PACKER_APT_SOURCES`}}",
+        "net_init": "{{env `PACKER_NET_INIT`}}"
     },
 
     "builders": [
@@ -442,6 +444,17 @@
 				"ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules"
             ],
             "only": ["srv.onebula", "kws.onebula", "ws.onebula"]
+        },
+        {
+            "type": "shell",
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
+            "inline": [
+                "curl http://${PACKER_HTTP_ADDR}/scripts/etcnet.py -o /usr/lib/python2.7/site-packages/cloudinit/net/etcnet.py",
+                "[[ -n \"${NET_INIT}\" ]] && systemctl enable ${NET_INIT}"
+            ],
+            "environment_vars": [
+              "NET_INIT={{user `net_init`}}"
+            ]
         },
         {
             "type": "shell",
