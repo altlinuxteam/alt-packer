@@ -54,7 +54,22 @@ class Renderer(renderer.Renderer):
         options_path = "%(base)s/%(name)s/options"
         ipv4_path    = "%(base)s/%(name)s/ipv4address"
         ipv4r_path   = "%(base)s/%(name)s/ipv4route"
+        resolv_path  = "%(base)s/lo/resolv.conf"
+
+        nameservers = network_state.dns_nameservers
+        searchdomains = network_state.dns_searchdomains
+        resolvconf = []
+        for sd in searchdomains:
+            resolvconf.append("search\t%s" % sd)
+
+        for ns in nameservers:
+            resolvconf.append("nameserver\t%s" % ns)
+
         content = {}
+
+        path = resolv_path % ({'base': base_etcnet_dir})
+        content[path] = '\n'.join(resolvconf)
+
         for iface in network_state.iter_interfaces():
             if iface['type'] == "loopback":
                 continue
