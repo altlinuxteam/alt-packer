@@ -93,8 +93,10 @@ download_if_missing() {
 	target_file="${2}"
 	sha1_hash="${3}"
 
+	mkdir -p ${packer_cache_dir}
+
 	if ! test -e "${target_file}"; then
-		echo "Downloading ${target_file}"
+		echo "Downloading ${target_file} from ${source_url}"
 		curl -sS -o "${target_file}" "${source_url}" || (retcode=$?; echo "Error downloading ${target_file}: ${retcode}"; return ${retcode})
 	else
 		echo "File ${target_file} is already downloaded"
