@@ -1,0 +1,19 @@
+#! /bin/sh
+set -euo pipefail
+
+STEP_DIR=/vagrant/scripts
+
+sudo_step() {
+	script="${1}"
+
+	echo "STEP START: ${script}"
+	sudo -E ${STEP_DIR}/${script}
+	echo "STEP FINISH: ${script}"
+}
+
+main() {
+	sudo_step step_remove_test
+}
+
+main
+
