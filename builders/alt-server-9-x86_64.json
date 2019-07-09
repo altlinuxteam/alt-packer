@@ -1,0 +1,166 @@
+{
+    "variables": {
+        "packer_cache_dir": "{{env `PACKER_CACHE_DIR`}}",
+        "target": "{{env `PACKER_TARGET`}}",
+        "base_version": "{{env `PACKER_BASE_VERSION`}}",
+        "arch": "{{env `PACKER_ARCH`}}",
+        "headless": "{{env `PACKER_HEADLESS`}}",
+        "target_version": "{{env `PACKER_TARGET_VERSION`}}",
+        "apt_sources": "{{env `PACKER_APT_SOURCES`}}",
+        "net_init": "{{env `PACKER_NET_INIT`}}",
+        "root_password": "123"
+    },
+
+    "builders": [
+        {
+            "name": "qemu.9-srv",
+            "type": "qemu",
+            "accelerator": "kvm",
+            "vm_name": "qemu.9-srv",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "output_directory": "qemu.alt-server-9-x86_64",
+            "headless": "{{user `headless`}}",
+            "qemuargs": [
+                [ "-m", "2048M" ]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{ user `packer_cache_dir` }}/{{user `iso_target_path`}}",
+
+            "ssh_username": "{{user `ssh_user`}}",
+            "ssh_password": "{{user `ssh_pass`}}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+            "http_directory": "./",
+
+            "boot_wait": "2s",
+            "disk_interface": "virtio-scsi",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "linux ",
+                  "showopts ",
+                  "net.ifnames=0 ",
+                  "selinux=0 ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/9-server/ ",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
+            "name": "vbox.9-srv",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
+            "vm_name": "vbox.9-srv",
+            "disk_size": 30000,
+            "output_directory": "vbox.alt-server-9-x86_64",
+            "headless": "{{user `headless`}}",
+            "keep_registered": false,
+            "guest_additions_mode": "disable",
+            "vboxmanage": [
+                ["modifyvm", "{{.Name}}", "--memory", "2048"],
+                ["modifyvm", "{{.Name}}", "--cpus", "1"],
+                ["modifyvm", "{{.Name}}", "--clipboard", "bidirectional"]
+            ],
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{ user `packer_cache_dir` }}/{{user `iso_target_path`}}",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `vagrant_user` }}",
+            "ssh_password": "{{ user `vagrant_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                "linux ",
+                  "showopts ",
+                  "net.ifnames=0 ",
+                  "selinux=0 ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/9-server/ ",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "ALT Server 9 x86_64",
+                "--version", "9"
+            ],
+
+            "format": "ova"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "scripts/",
+            "destination": "/tmp/"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/vm_setup",
+            "environment_vars": [
+                "ROOT_PASS={{ user `root_password` }}",
+                "PASS='{{ user `ssh_pass` }}'",
+                "SSH_USER='{{ user `ssh_user` }}'",
+                "VM_TYPE=qemu"
+            ],
+            "only": ["qemu.9-srv"]
+        },
+        {
+            "type": "shell",
+            "script": "scripts/vm_setup",
+            "environment_vars": [
+                "ROOT_PASS={{ user `root_password` }}",
+                "PASS='{{ user `ssh_pass` }}'",
+                "SSH_USER='{{ user `ssh_user` }}'",
+                "VM_TYPE=vbox"
+            ],
+            "only": ["vbox.9-srv"]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "checksum",
+            "checksum_types": [ "md5", "sha1" ],
+            "output": "results/{{.BuildName}}.{{.ChecksumType}}"
+        },
+        {
+            "type": "vagrant",
+            "output": "results/{{.BuildName}}.box",
+            "only": ["vbox.9-srv"]
+        },
+        {
+            "type": "compress",
+            "output": "results/{{.BuildName}}.tar.gz",
+            "only": ["qemu.9-srv"]
+        },
+        {
+            "type": "manifest",
+            "output": "results/manifest.json",
+            "strip_path": true
+        }
+    ]
+}
+
