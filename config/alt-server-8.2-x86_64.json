@@ -3,5 +3,10 @@
     "iso_checksum": "719d43ed40dc5774c8e40166746856d5b94e41c5",
     "iso_checksum_type": "sha1",
     "iso_address": "10.64.0.6",
-    "iso_dir": "/iso/alt-8-server-x86_64/"
+    "iso_dir": "/iso/alt-8-server-x86_64/",
+    "boot_cmd": "linux net.ifnames=0 automatic=method:cdrom,network:dhcp lowmem quiet=1 showopts",
+    "metadata": "8.2-server",
+    "descr": "ALT Linux Server 8 x86_64",
+    "with_cloudinit": "0"
 }
+

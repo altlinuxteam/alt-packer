@@ -3,6 +3,10 @@
     "iso_checksum": "ed350ef58081c1b63d23109b41b89eb676db6010",
     "iso_checksum_type": "sha1",
 	"iso_address": "10.64.0.6",
-    "iso_dir": "/iso/alt-workstation-8-x86_64/"
-
+    "iso_dir": "/iso/alt-workstation-8-x86_64/",
+    "boot_cmd": "linux net.ifnames=0 automatic=method:cdrom,network:dhcp lowmem quiet=1 showopts",
+    "metadata": "8.2-workstation",
+    "descr": "ALT Linux Workstation 8.2 x86_64",
+    "with_cloudinit": "0"
 }
+

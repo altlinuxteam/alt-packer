@@ -1,0 +1,13 @@
+{
+    "iso_url": "",
+    "iso_target_path": "alt-server-8sp-x86_64.iso",
+    "iso_checksum": "3376ac56b27ab48415165b02c326399154f9b9c1",
+    "iso_checksum_type": "sha1",
+    "iso_address": "10.64.0.6",
+    "iso_dir": "/iso/alt-8.0.0-20170929-cliff-server-fstek-x86_64-ru-install-cd",
+    "boot_cmd": "linux net.ifnames=0 selinux=0 automatic=method:cdrom,network:dhcp lowmem quiet=1 showopts",
+    "metadata": "8sp-server",
+    "descr": "ALT Linux Server 8SP x86_64",
+    "with_cloudinit": "0"
+}
+
