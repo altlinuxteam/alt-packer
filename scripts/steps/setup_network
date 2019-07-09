@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Configuring networking interfaces"
+rm -rf "/etc/net/ifaces/ens4"
+sed -i 's/ALLOW_UNKNOWN=off/ALLOW_UNKNOWN=yes/' /etc/net/options.d/50-ALTLinux-server
+

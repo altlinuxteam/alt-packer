@@ -1,0 +1,37 @@
+#! /bin/sh
+# Script to initiate VM configuration process
+set -euo pipefail
+
+main() {
+	STEP_DIR=/tmp/steps
+
+	echo "Installing sudo"
+	{ sleep 2 ; echo "${ROOT_PASS}" ; } | script -q -c "su -c ${STEP_DIR}/setup_sudo" /dev/null
+
+	echo "Configuring APT"
+	sudo -E sh -c "${STEP_DIR}/setup_apt"
+
+	echo "configuring user for Vagrant"
+	sudo -E sh -c "${STEP_DIR}/setup_vagrant"
+
+	if test "${VM_TYPE}" == "qemu"; then
+		echo "Configuring keys for agent"
+		sudo -E sh -c "${STEP_DIR}/setup_agent"
+	fi
+
+	echo "Configuring UDEV"
+	sudo -E sh -c "${STEP_DIR}/setup_udev"
+
+	if test "${VM_TYPE}" == "qemu"; then
+		echo "Configuring VM network"
+		sudo -E sh -c "${STEP_DIR}/setup_network"
+	fi
+
+	if test "${VM_TYPE}" == "vbox"; then
+		echo "Installing VirtualBox Guest Additions"
+		env SSH_USER="${SSH_USER}" "/tmp/install-guest-tools.sh"
+	fi
+}
+
+main
+

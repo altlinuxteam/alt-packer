@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+mkdir -p /home/vagrant/.ssh
+curl "http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub" -o "/home/vagrant/.ssh/authorized_keys"
+chown -Rv vagrant:vagrant /home/vagrant
+

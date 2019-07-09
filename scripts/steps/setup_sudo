@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+apt-get update
+apt-get -y install sudo
+sed -i 's|^.*\(WHEEL_USERS ALL=(ALL) NOPASSWD: ALL\)$|\1|' /etc/sudoers
+
