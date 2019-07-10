@@ -15,7 +15,7 @@ net_init =
 # - abort - stop and leave everything "as is"
 # - cleanup - is the default behavior
 # - ask - ask what to do
-onerror = ask
+onerror = cleanup
 build_command = $(packer_bin) build -var-file=config/common.json -on-error=$(onerror)
 
 prepare:
