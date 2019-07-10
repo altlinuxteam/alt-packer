@@ -1,0 +1,9 @@
+{
+    "iso_url": "http://ftp.altlinux.ru/pub/distributions/ALTLinux/p9/images/workstation/alt-workstation-8.900_alpha1-x86_64.iso",
+    "iso_target_path": "alt-workstation-9-x86_64.iso",
+    "iso_checksum": "222a572d492864cb00d270c726457e14d63113e4",
+    "iso_checksum_type": "sha1",
+    "iso_address": "10.64.0.6",
+    "iso_dir": "/iso/alt-workstation-8.900_alpha1-x86_64/"
+}
+
