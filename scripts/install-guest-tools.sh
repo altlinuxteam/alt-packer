@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#! /bin/sh
 
-sudo apt-get install -y virtualbox-guest-utils
+apt-get -y install virtualbox-guest-utils

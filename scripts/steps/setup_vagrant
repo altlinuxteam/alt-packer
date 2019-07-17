@@ -1,0 +1,9 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Configuring Vagrant user"
+mkdir -p /home/vagrant/.ssh
+curl "http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub" -o "/home/vagrant/.ssh/authorized_keys"
+chown -Rv vagrant:vagrant /home/vagrant
+echo "Vagrant user configured"
+
