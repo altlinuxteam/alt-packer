@@ -63,6 +63,7 @@ main() {
 	fi
 
 	sudo_step "${STEP_DIR}/setup_ssh"
+	sudo_step "${STEP_DIR}/setup_ansible"
 }
 
 show_vars
