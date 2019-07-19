@@ -11,10 +11,6 @@ THIS_FILE := $(lastword $(MAKEFILE_LIST))
 # - vbox
 # - onebula
 VM_TYPE := qemu
-# net_init may be:
-# - cloud-init - Use cloud-init scripts
-# - empty - don't do anything
-net_init =
 # on-error may be:
 # - abort - stop and leave everything "as is"
 # - cleanup - is the default behavior
@@ -30,7 +26,6 @@ image:
 	PACKER_HEADLESS="$(headless)" \
 	PACKER_LOG=1 \
 	PACKER_TARGET_VERSION="$(TARGET_VERSION)" \
-	PACKER_NET_INIT="$(net_init)" \
 	PACKER_VM_TYPE="$(VM_TYPE)" \
-	$(build_command) -var-file=config/$(target)-$(BASE_VERSION)-$(arch).json -only=$(VM_TYPE)-vm build.json
+	./build_vm
 
