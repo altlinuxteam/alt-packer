@@ -5,6 +5,7 @@
 * [Overview](#overview)
 * [Preparation](#preparation)
 * [Building images](#building-images)
+* [Publishing images](#publishing-images)
 * [Using images with Vagrant](#using-images-with-vagrant)
 * [Troubleshooting](#troubleshooting)
 
@@ -35,6 +36,7 @@ Install the following dependencies:
 * **qemu-ui-sdl**
 * **virtualbox**
 * **packer**
+* **vagrant** (only if you plan to distribute boxes via Vagrant Cloud)
 * **kernel-modules-kvm-std-def**
 * **kernel-modules-virtualbox-std-def**
 
@@ -84,6 +86,17 @@ or if you want to build image for **VirtualBox**:
 
 ```sh
 make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
+```
+
+
+## Publishing images
+
+You may publish previously built boxes using **Vagrant** software like:
+
+```sh
+export VAGRANTCLOUD_TOKEN="my_cloud_auth_token"
+make publish orgname=myorg target=alt-server VM_TYPE=vbox BASE_VERSION=9 TARGET_VERSION=9
+make publish orgname=myorg target=alt-workstation VM_TYPE=qemu BASE_VERSION=9 TARGET_VERSION=9
 ```
 
 
