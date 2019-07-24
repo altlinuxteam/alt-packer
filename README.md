@@ -4,6 +4,7 @@
 
 * [Overview](#overview)
 * [Preparation](#preparation)
+* [Building images](#building-images)
 * [Troubleshooting](#troubleshooting)
 
 * * *
@@ -69,46 +70,21 @@ Then reboot the machine.
 
 * Create the `packer_cache` directory (or symlink it) and download the
 necessary ISOs into it.
-* Create the `./distr` directory which will serve as a mountpoint.
 
-  You will need privileges to bind `Packer` HTTP server to the port 80 because the netinstaller will wait for http-server only in port 80. Also to works properly installation ISO should be mounted to the `./distr` mountpoint.
-
-```sh
-sudo mount -o loop packer_cache/<hash_for_iso>.iso distr/
-```
-
-  Then look into `variables.json` and change defaults to desired values. Next you can validate definitions via:
-
-```sh
-packer validate -var-file=variables.json build.json
-```
-
-## Builders
+## Building images
 
 You may start building image for **QEMU** like:
 
 ```sh
-make alt-server-build headless=false BASE_VERSION=9 VM_TYPE=qemu
+make image target=alt-workstation headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=qemu
 ```
 
 or if you want to build image for **VirtualBox**:
 
 ```sh
-make alt-workstation-build headless=false BASE_VERSION=9 VM_TYPE=vbox
+make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
 ```
 
-
-## Build server image for Vagrant
-
-```sh
-sudo packer build -var-file=variables.json -only=srv.vbox build.json
-```
-
-## Build server image for QEmu
-
-```sh
-sudo packer build -var-file=variables.json -only=srv.qemu build.json
-```
 
 ## Troubleshooting
 
