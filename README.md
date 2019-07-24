@@ -5,6 +5,7 @@
 * [Overview](#overview)
 * [Preparation](#preparation)
 * [Building images](#building-images)
+* [Using images with Vagrant](#using-images-with-vagrant)
 * [Troubleshooting](#troubleshooting)
 
 * * *
@@ -83,6 +84,16 @@ or if you want to build image for **VirtualBox**:
 
 ```sh
 make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
+```
+
+
+## Using images with Vagrant
+
+You may find **Vagrantfile** templates in `vagrant` directory. Just go
+into subdirectory corresponding to the box you want to start and type
+
+```sh
+vagrant up
 ```
 
 
