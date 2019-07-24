@@ -4,6 +4,10 @@
 
 * [Overview](#overview)
 * [Preparation](#preparation)
+* [Building images](#building-images)
+* [Publishing images](#publishing-images)
+* [Syncing images](#syncing-images)
+* [Using images with Vagrant](#using-images-with-vagrant)
 * [Troubleshooting](#troubleshooting)
 
 * * *
@@ -29,10 +33,12 @@ Install the following dependencies:
 * **make**
 * **jq**
 * **curl**
+* **wget**
 * **qemu-kvm**
 * **qemu-ui-sdl**
 * **virtualbox**
 * **packer**
+* **vagrant** (only if you plan to distribute boxes via Vagrant Cloud)
 * **kernel-modules-kvm-std-def**
 * **kernel-modules-virtualbox-std-def**
 
@@ -69,46 +75,53 @@ Then reboot the machine.
 
 * Create the `packer_cache` directory (or symlink it) and download the
 necessary ISOs into it.
-* Create the `./distr` directory which will serve as a mountpoint.
 
-  You will need privileges to bind `Packer` HTTP server to the port 80 because the netinstaller will wait for http-server only in port 80. Also to works properly installation ISO should be mounted to the `./distr` mountpoint.
-
-```sh
-sudo mount -o loop packer_cache/<hash_for_iso>.iso distr/
-```
-
-  Then look into `variables.json` and change defaults to desired values. Next you can validate definitions via:
-
-```sh
-packer validate -var-file=variables.json build.json
-```
-
-## Builders
+## Building images
 
 You may start building image for **QEMU** like:
 
 ```sh
-make alt-server-build headless=false BASE_VERSION=9 VM_TYPE=qemu
+make image target=alt-workstation headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=qemu
 ```
 
 or if you want to build image for **VirtualBox**:
 
 ```sh
-make alt-workstation-build headless=false BASE_VERSION=9 VM_TYPE=vbox
+make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
 ```
 
 
-## Build server image for Vagrant
+## Publishing images
+
+You may publish previously built boxes using **Vagrant** software like:
 
 ```sh
-sudo packer build -var-file=variables.json -only=srv.vbox build.json
+export VAGRANTCLOUD_TOKEN="my_cloud_auth_token"
+make publish orgname=myorg target=alt-server VM_TYPE=vbox BASE_VERSION=9 TARGET_VERSION=9
+make publish orgname=myorg target=alt-workstation VM_TYPE=qemu BASE_VERSION=9 TARGET_VERSION=9
 ```
 
-## Build server image for QEmu
+
+## Syncing images
+
+In order to keep images up-to-date there is `sync_images` script
+provided in the repository. It parses the corresponding ditro
+configuration files and checks if the necessary images are provided in
+the `./packer_cache` directory. It's advised to set up to start this
+script using `crond` in order to keep images synchronized.
+
+It is also possible to invoke the script using `make sync` command.
+
+
+## Using images with Vagrant
+
+You may find **Vagrantfile** templates in `vagrant` directory. Just go
+into subdirectory corresponding to the box you want to start and type
 
 ```sh
-sudo packer build -var-file=variables.json -only=srv.qemu build.json
+vagrant up
 ```
+
 
 ## Troubleshooting
 
