@@ -1,0 +1,8 @@
+#! /bin/sh
+set -euo pipefail
+# Remove user "test" from the box.
+
+if ! id -u test; then
+	userdel -fr "test"
+fi
+

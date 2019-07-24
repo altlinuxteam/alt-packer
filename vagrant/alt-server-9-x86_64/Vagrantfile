@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby
+
+user_config = Hash.new
+user_config[:memory] = 2048
+user_config[:cpus] = 2
+user_config[:vm_name] = "ALT Linux Server 9 (p9)"
+user_config[:hostname] = "testhost"
+user_config[:username] = "user"
+user_config[:password] = "user"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "BaseALT/alt-server-9-x86_64"
+  config.vm.box_version = "1.0.0"
+  config.vm.hostname = user_config[:hostname]
+  config.vm.network :private_network, ip: "192.168.0.44"
+  config.vm.synced_folder "./../data", "/vagrant", disabled: true
+
+  config.vm.provider :virtualbox do |vb|
+    vb.gui = true
+    vb.name = user_config[:vm_name]
+    vb.memory = user_config[:memory]
+    vb.cpus = user_config[:cpus]
+    vb.customize [
+      "modifyvm", :id,
+      "--clipboard", "bidirectional"
+    ]
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo userdel -fr test
+    sudo useradd #{user_config[:username]}
+    sudo usermod -aG fuse,wheel #{user_config[:username]}
+    sudo echo "#{user_config[:username]}:#{user_config[:password]}" | chpasswd
+  SHELL
+end
+
