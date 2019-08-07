@@ -134,7 +134,7 @@
                 "--manifest",
                 "--vsys", "0",
                 "--description", "{{ user `descr` }}",
-                "--version", "{{ user `target_version` }}"
+                "--version", "{{ user `image_version` }}"
             ],
 
             "format": "ova"
