@@ -9,9 +9,13 @@ SSH_USER="${SSH_USER:-test}"
 TARGET_REPOS="${TARGET_REPOS:-sisyphus}"
 ARCH="${ARCH:-x86_64}"
 CLOUDINIT="${CLOUDINIT:-0}"
+SISYPHUS="${SISYPHUS:-0}"
 ROOT_PASS="${ROOT_PASS:-123}"
 PASS="${PASS:-123}"
 
+if test "${SISYPHUS}" == "1"; then
+	TARGET_REPOS=sisyphus
+fi
 
 show_vars() {
 	echo "Building box: ${TARGET}"
@@ -21,6 +25,7 @@ show_vars() {
 	echo "Targeting repos for: ${TARGET_REPOS}"
 	echo "Targeting repos for architecture: ${ARCH}"
 	echo "Enable cloud-init: ${CLOUDINIT}"
+	echo "Update to Sisyphus: ${SISYPHUS}"
 }
 
 sudo_step() {
