@@ -1,13 +1,13 @@
 {
     "iso_url": "http://ftp.altlinux.ru/pub/distributions/ALTLinux/p9/images/server/alt-server-20190704_alpha1-x86_64.iso",
     "iso_target_path": "alt-server-9-x86_64.iso",
-    "iso_checksum": "51b0f51528b6a5c66f9469b174fb1604af3fc576",
+    "iso_checksum": "4db9a0a69967c8dbee875c6e3ecee59ffee09378",
     "iso_checksum_type": "sha1",
-    "iso_address": "10.64.0.6",
-    "iso_dir": "/iso/alt-server-20190704_alpha1-x86_64/",
     "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
     "metadata": "9-server",
     "descr": "ALT Linux Server 9 x86_64",
-    "with_cloudinit": "1"
+    "image_version": "1.1.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0"
 }
 
