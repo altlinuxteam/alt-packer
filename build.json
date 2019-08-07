@@ -23,7 +23,7 @@
             "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
-            "memory": 4096,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
@@ -62,7 +62,7 @@
             "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
-            "memory": 4096,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
@@ -101,7 +101,7 @@
             "keep_registered": false,
             "guest_additions_mode": "disable",
             "cpus": 1,
-            "memory": 2048,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",

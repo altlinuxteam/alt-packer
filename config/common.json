@@ -4,5 +4,6 @@
     "vagrant_user": "vagrant",
     "vagrant_pass": "vagrant",
     "http_port_min": "8978",
-    "http_port_max": "9978"
+    "http_port_max": "9978",
+    "vm_mem": "4096"
 }
