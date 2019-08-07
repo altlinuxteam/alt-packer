@@ -16,11 +16,11 @@
             "name": "qemu-vm",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -59,7 +59,7 @@
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -166,17 +166,12 @@
         {
             "type": "checksum",
             "checksum_types": [ "md5", "sha1" ],
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.{{.ChecksumType}}"
+            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.{{.ChecksumType}}"
         },
         {
             "type": "vagrant",
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.box",
-            "only": [ "vbox-vm" ]
-        },
-        {
-            "type": "compress",
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.tar.gz",
-            "only": [ "qemu-vm" ]
+            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.box",
+            "only": [ "qemu-vm", "vbox-vm" ]
         },
         {
             "type": "manifest",
