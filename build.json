@@ -158,7 +158,8 @@
                 "TARGET={{ user `target` }}",
                 "TARGET_REPOS={{ user `target_version` }}",
                 "ARCH={{ user `arch` }}",
-                "CLOUDINIT={{ user `with_cloudinit` }}"
+                "CLOUDINIT={{ user `with_cloudinit` }}",
+                "SISYPHUS={{ user `with_sisyphus` }}"
             ]
         }
     ],
