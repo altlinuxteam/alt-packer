@@ -3,11 +3,11 @@
     "iso_target_path": "alt-workstation-8sp-x86_64.iso",
     "iso_checksum": "5fd504fe08b50803d153f33189afb60e6bd7c66a",
     "iso_checksum_type": "sha1",
-    "iso_address": "10.64.0.6",
-    "iso_dir": "/iso/alt-8.0.0-20171002-cliff-desktop-fstek-x86_64-ru-install-dvd5",
     "boot_cmd": "linux net.ifnames=0 selinux=0 automatic=method:cdrom,network:dhcp lowmem quiet=1 showopts",
     "metadata": "8sp-workstation",
     "descr": "ALT Linux Workstation 8SP x86_64",
-    "with_cloudinit": "0"
+    "image_version": "1.1.0",
+    "with_cloudinit": "0",
+    "with_sisyphus": "0"
 }
 

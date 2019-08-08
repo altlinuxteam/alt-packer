@@ -1,0 +1,13 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/images/p8/kworkstation/alt-kworkstation-8.3-install-x86_64.iso",
+    "iso_target_path": "alt-kworkstation-8.3-x86_64.iso",
+    "iso_checksum": "77d28eb143efaeeb648d7e322a28d2347f1370b6",
+    "iso_checksum_type": "sha1",
+    "boot_cmd": "linux quiet=1 showopts net.ifnames=0 automatic=method:cdrom,network:dhcp",
+    "metadata": "8.3-kworkstation",
+    "descr": "ALT Linux KWorkstation 8.3 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "0",
+    "with_sisyphus": "0"
+}
+

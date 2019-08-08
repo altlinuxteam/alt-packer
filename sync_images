@@ -1,0 +1,63 @@
+#! /bin/sh
+set -euo pipefail
+
+# This script parses image configuration files located in `./config`
+# directory and then checks if images are downloaded and checksums are
+# correct.
+
+PACKER_CACHE_DIR="${PACKER_CACHE_DIR:-packer_cache}"
+PACKER_CONFIGS="${PACKER_CONFIGS:-config}"
+
+compute_checksum() {
+	image_file="${1}"
+
+	sha1sum "${image_file}" | awk -P '{ print $1 }'
+}
+
+force_download_image() {
+	packer_cache="${PACKER_CACHE}"
+
+	config="${1}"
+	image="${2}"
+
+	wget -N -q -O "${packer_cache}/${image}" `get_param ${config} iso_url`
+}
+
+get_param() {
+	json_file="${1}"
+	param_name="${2}"
+
+	jq -r ".${param_name}" "${json_file}"
+}
+
+main() {
+	packer_cache="${PACKER_CACHE_DIR}"
+	packer_configs="${PACKER_CONFIGS}"
+
+	for config in `ls ${packer_configs}/alt-*.json`
+	do
+		image=`get_param ${config} iso_target_path`
+		echo "Checking" `get_param ${config} descr`
+		echo "Image: ${image}"
+		img_stored_cksum=`get_param ${config} iso_checksum `
+
+		if test -e "${packer_cache}/${image}"; then
+			img_real_cksum=`compute_checksum "${packer_cache}/${image}"`
+
+			if test "${img_real_cksum}" == "${img_stored_cksum}"; then
+				echo "Image ${image} is already downloaded and correct"
+			else
+				echo "Image ${image} is broken"
+				echo "Downloading image ${image}"
+				force_download_image "${config}" "${image}"
+			fi
+		else
+			echo "No file present for image ${image}"
+			echo "Downloading image ${image}"
+			force_download_image "${config}" "${image}"
+		fi
+	done
+}
+
+main
+

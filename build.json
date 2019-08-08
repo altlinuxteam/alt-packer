@@ -16,19 +16,19 @@
             "name": "qemu-vm",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
-            "memory": 4096,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{ user `iso_target_path`}}",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -59,15 +59,15 @@
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}",
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "headless": "{{user `headless`}}",
             "cpus": 1,
-            "memory": 4096,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{ user `iso_target_path`}}",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -101,12 +101,12 @@
             "keep_registered": false,
             "guest_additions_mode": "disable",
             "cpus": 1,
-            "memory": 2048,
+            "memory": "{{ user `vm_mem` }}",
 
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_target_path": "{{user `packer_cache_dir`}}/{{user `target`}}-{{user `base_version`}}-{{user `arch`}}.iso",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{ user `iso_target_path`}}",
 
             "http_port_min": "{{user `http_port_min`}}",
             "http_port_max": "{{user `http_port_max`}}",
@@ -134,7 +134,7 @@
                 "--manifest",
                 "--vsys", "0",
                 "--description", "{{ user `descr` }}",
-                "--version", "{{ user `target_version` }}"
+                "--version", "{{ user `image_version` }}"
             ],
 
             "format": "ova"
@@ -158,7 +158,8 @@
                 "TARGET={{ user `target` }}",
                 "TARGET_REPOS={{ user `target_version` }}",
                 "ARCH={{ user `arch` }}",
-                "CLOUDINIT={{ user `with_cloudinit` }}"
+                "CLOUDINIT={{ user `with_cloudinit` }}",
+                "SISYPHUS={{ user `with_sisyphus` }}"
             ]
         }
     ],
@@ -166,17 +167,12 @@
         {
             "type": "checksum",
             "checksum_types": [ "md5", "sha1" ],
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.{{.ChecksumType}}"
+            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.{{.ChecksumType}}"
         },
         {
             "type": "vagrant",
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.box",
-            "only": [ "vbox-vm" ]
-        },
-        {
-            "type": "compress",
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `base_version` }}-{{ user `arch` }}.tar.gz",
-            "only": [ "qemu-vm" ]
+            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.box",
+            "only": [ "qemu-vm", "vbox-vm" ]
         },
         {
             "type": "manifest",

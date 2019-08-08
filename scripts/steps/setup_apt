@@ -4,7 +4,7 @@ set -euo pipefail
 echo "Configuring APT"
 curl \
 	http://${PACKER_HTTP_ADDR}/scripts/repos/yandex-mirror-${TARGET_REPOS}-${ARCH}.list \
-	-o /etc/apt/sources.list.d/srt.basealt.ru-${TARGET_REPOS}-${ARCH}.list
+	-o /etc/apt/sources.list.d/yandex-mirror-${TARGET_REPOS}-${ARCH}.list
 
 mv "/tmp/rc.apt" "/etc/rc.d/scripts/apt-cache-on-tmp"
 mv "/tmp/rc.local" "/etc/rc.d/rc.local"
@@ -14,7 +14,9 @@ apt-get clean
 apt-get -qy update
 apt-get -qy install apt rpm
 apt-get -qy dist-upgrade
+apt-get clean
 apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net
+systemctl unmask qemu-guest-agent
 systemctl enable qemu-guest-agent
 systemctl disable cloud-init
 rm -f "/etc/apt/sources.list.d/sources.installer.list"
