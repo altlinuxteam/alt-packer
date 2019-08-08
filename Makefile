@@ -1,5 +1,4 @@
 PACKER_CACHE_DIR := ./packer_cache
-packer_bin = $(shell which packer)
 arch = x86_64
 BASE_VERSION = 8.2
 headless = true
@@ -16,8 +15,9 @@ VM_TYPE := qemu
 # - cleanup - is the default behavior
 # - ask - ask what to do
 onerror = cleanup
-build_command = $(packer_bin) build -var-file=config/common.json -on-error=$(onerror)
+organization = BaseALT
 
+# Build base VM box using Packer
 image:
 	PACKER_CACHE_DIR="$(PACKER_CACHE_DIR)" \
 	PACKER_TARGET="$(target)" \
@@ -28,4 +28,19 @@ image:
 	PACKER_TARGET_VERSION="$(TARGET_VERSION)" \
 	PACKER_VM_TYPE="$(VM_TYPE)" \
 	./build_vm
+
+# Publish previously built VM box using Vagrant. Please note that you'll
+# need to provide TOKEN from Vagrant Cloud as environment variable.
+publish:
+	target="$(target)" \
+	arch="$(arch)" \
+	BASE_VERSION="$(BASE_VERSION)" \
+	TARGET_VERSION="$(TARGET_VERSION)" \
+	VM_TYPE="$(VM_TYPE)" \
+	./publish_vm
+
+# Download images specified in JSON configuration files.
+sync:
+	PACKER_CACHE_DIR="$(PACKER_CACHE_DIR)" \
+	./sync_images
 

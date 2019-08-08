@@ -1,0 +1,86 @@
+#! /bin/sh
+set -euo pipefail
+
+# This script publishes recently built Vagrant Box located in
+# `./results` directory on Vagrant Cloud.
+
+TOKEN=${VAGRANTCLOUD_TOKEN}
+
+orgname=${orgname:-BaseALT}
+target=${target:-alt-server}
+arch=${arch:-x86_64}
+BASE_VERSION=${BASE_VERSION:-9}
+TARGET_VERSION=${TARGET_VERSION:-9}
+VM_TYPE=${VM_TYPE:-qemu}
+
+# Check that the variable is set to correct value
+# $1 - variable name
+# $2 - variable value
+# $* - list of all possible values
+assert_value() {
+	variable_name="${1}"
+	variable_value="${2}"
+	shift 2
+	possible_values="$*"
+	comparison_success=false
+
+	echo "CHECKING: ${variable_name}, must be one of: ${possible_values}"
+
+	for pval in ${possible_values}; do
+		if test "${variable_value}" == "${pval}"; then
+			comparison_success=true
+			break
+		fi
+	done
+
+	if test "${comparison_success}" == "true"; then
+		echo "CHECKING: ${variable_name}, SUCCESS"
+		return 0
+	else
+		echo "CHECKING: ${variable_name}, FAIL"
+		return 1
+	fi
+}
+
+main() {
+	assert_value target ${target} alt-server alt-workstation alt-kworkstation
+	assert_value arch ${arch} i586 x86_64
+	assert_value BASE_VERSION ${BASE_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' 'sisyphus'
+	assert_value TARGET_VERSION ${TARGET_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' 'sisyphus'
+	assert_value VM_TYPE ${VM_TYPE} qemu onebula vbox
+
+	if test "${BASE_VERSION}" == "sisyphus"; then
+		TARGET_VERSION="sisyphus"
+	fi
+
+	# Vagrant Cloud forbade underscores in box names
+	vagrant_arch="${arch}"
+	if test "${vagrant_arch}" == "x86_64"; then
+		vagrant_arch="amd64"
+	fi
+
+	vagrantcloud_path=${orgname}/${target}-${TARGET_VERSION}-${vagrant_arch}
+	box_file=results/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}.box
+
+	provider="${VM_TYPE}"
+	if test "${VM_TYPE}" == "vbox"; then
+		provider="virtualbox"
+	fi
+	if test "${VM_TYPE}" == "onebula"; then
+		echo "OpenNebula provider is not supported by Vagrant Cloud"
+		exit 1
+	fi
+	assert_value provider ${provider} virtualbox qemu libvirt
+
+	vagrant cloud auth login --token "${TOKEN}"
+	vagrant cloud publish \
+		${vagrantcloud_path} \
+		`jq -r '.image_version' ./config/${target}-${BASE_VERSION}-${arch}.json` \
+		${provider} \
+		${box_file} \
+		-f
+	vagrant cloud auth logout
+}
+
+main
+
