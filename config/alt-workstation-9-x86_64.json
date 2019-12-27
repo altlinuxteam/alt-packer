@@ -1,8 +1,8 @@
 {
-    "iso_url": "http://ftp.altlinux.ru/pub/distributions/ALTLinux/p9/images/workstation/x86_64/alt-workstation-9.0beta3-20190722-x86_64.iso",
-    "iso_target_path": "alt-workstation-9-x86_64.iso",
-    "iso_checksum": "d9077fe15eb441851ae242688e548d1cbcee81e3",
-    "iso_checksum_type": "sha1",
+    "iso_url": "http://ftp.altlinux.ru/pub/distributions/ALTLinux/p9/images/workstation/x86_64/alt-workstation-9.0-x86_64.iso",
+    "iso_target_path": "alt-workstation-9.0-x86_64.iso",
+    "iso_checksum": "970155500035b2f8e43f6dd7d2c424fa",
+    "iso_checksum_type": "md5",
     "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
     "metadata": "9-workstation",
     "descr": "ALT Linux Workstation 9 x86_64",
