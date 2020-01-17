@@ -61,3 +61,6 @@
 ("/users/create_account" new_name "test" gecos "" allow_su #t auto #f passwd_1 "123" passwd_2 "123")
 ("/users/create_account" new_name "vagrant" gecos "" allow_su #t auto #f passwd_1 "vagrant" passwd_2 "vagrant")
 
+; There is no sshd available in Workstation by default so we enable it
+("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")
+
