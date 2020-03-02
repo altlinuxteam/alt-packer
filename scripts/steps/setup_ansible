@@ -4,6 +4,9 @@ set -euo pipefail
 
 echo "Installing Ansible packages"
 
+# Python's stdlib JSON module was moved out of Python 2 standard
+# installation in ALT Platform 9 releases for some unimaginable reason.
+apt-get -y install 'python-modules-json'
 apt-get -y install 'python2.7(distutils)'
 
 echo "Ansible prerequisites installed"

@@ -41,6 +41,7 @@ Install the following dependencies:
 * **vagrant** (only if you plan to distribute boxes via Vagrant Cloud)
 * **kernel-modules-kvm-std-def**
 * **kernel-modules-virtualbox-std-def**
+* **nbd-client**, **nbd-server** (if you plan to transfer images using NBD)
 
 and add the necessary kernel module to the list of modules to load:
 
@@ -122,10 +123,55 @@ into subdirectory corresponding to the box you want to start and type
 vagrant up
 ```
 
+## Deploying images to Proxmox
+
+First export QCOW2 image from build machine using NBD (on port 12345):
+
+```sh
+nbd-server 12345 /mnt/disk/alt-packer/qemu-alt-server-9-amd64/qemu-alt-server-9-amd64
+```
+
+On the client you need to issue command to connect to NBD server
+(assuming server IP is 192.168.1.101):
+
+```sh
+nbd-client -D 192.168.1.101 12345
+```
+
+On client, you may check that QCOW2 image is mounted using these
+commands:
+
+```sh
+file -s /dev/nbd0
+```
+
+or better:
+
+```sh
+qemu-img info /dev/nbd0
+```
+
+Then (on client) use `qemu-img` utility to transfer image to block
+device of your choice:
+
+```sh
+qemu-img dd bs=1M if=/dev/nbd0 of=/dev/pve/zvol/vm-100-disk-1
+```
+
+This may take quite a time because of large file transfer.
+
+Then disconnect the client:
+
+```sh
+nbd-client -d /dev/nbd0
+```
+
+and stop the server with SIGINT (pressing Ctrl+C).
 
 ## Troubleshooting
 
-In case of problems with autoinstaller add `instdebug` option to
+* In case of problems with autoinstaller add `instdebug` option to
 kernel boot parameters.
-
+* In case of errors like `No space left on device` when using `/tmp`
+directory - set `TMPDIR` variable to another location.
 
