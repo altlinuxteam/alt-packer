@@ -1,0 +1,13 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p9/images/server/x86_64/alt-server-9.1-x86_64.iso",
+    "iso_target_path": "alt-server-9.1-x86_64.iso",
+    "iso_checksum": "ba8572a44ed3e51f9ef08e64aac42912",
+    "iso_checksum_type": "md5",
+    "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
+    "metadata": "9-server",
+    "descr": "ALT Linux Server 9.1 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0"
+}
+
