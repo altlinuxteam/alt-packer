@@ -68,4 +68,3 @@
 
 ; There is no sshd available in Workstation by default so we enable it
 ("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")
-

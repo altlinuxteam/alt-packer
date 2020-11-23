@@ -8,6 +8,7 @@ echo "Installing Ansible packages"
 # installation in ALT Platform 9 releases for some unimaginable reason.
 apt-get -y install 'python-modules-json'
 apt-get -y install 'python2.7(distutils)'
+apt-get -y install 'python-modules-json'
 
 echo "Ansible prerequisites installed"
 
