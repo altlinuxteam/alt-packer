@@ -15,6 +15,7 @@
         {
             "name": "qemu-vm",
             "type": "qemu",
+            "format": "qcow2",
             "accelerator": "kvm",
             "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
             "disk_size": 30000,
