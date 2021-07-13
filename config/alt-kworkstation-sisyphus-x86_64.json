@@ -1,12 +1,12 @@
 {
-    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/images/p9/kworkstation/x86_64/alt-kworkstation-8.90-beta20190805-install-x86_64.iso",
-    "iso_target_path": "alt-kworkstation-9-x86_64.iso",
-    "iso_checksum": "e14a7f535e59d1620757ea3436857467e62a0a2c",
-    "iso_checksum_type": "sha1",
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p9/images/kworkstation/alt-kworkstation-9.1-install-x86_64.iso",
+    "iso_target_path": "alt-kworkstation-9.1-x86_64.iso",
+    "iso_checksum": "e3ffce7941eadac4a739599e0d32cd87b",
+    "iso_checksum_type": "md5",
     "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
     "metadata": "9-kworkstation",
     "descr": "ALT Linux KWorkstation Sisyphus x86_64",
-    "image_version": "1.1.0",
+    "image_version": "20210701",
     "with_cloudinit": "1",
     "with_sisyphus": "1"
 }
