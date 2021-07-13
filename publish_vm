@@ -13,6 +13,10 @@ BASE_VERSION=${BASE_VERSION:-9}
 TARGET_VERSION=${TARGET_VERSION:-9}
 VM_TYPE=${VM_TYPE:-qemu}
 
+# Path to Vagrant box configuration file
+box_config="./config/${target}-${BASE_VERSION}-${arch}.json"
+vagrantcloud_path="${orgname}/${target}-${TARGET_VERSION}-${vagrant_arch}"
+
 # Check that the variable is set to correct value
 # $1 - variable name
 # $2 - variable value
@@ -42,11 +46,32 @@ assert_value() {
 	fi
 }
 
+
+# Free any used resources on errors
+cleanup() {
+	echo "Logging out of Vagrant cloud"
+	vagrant cloud auth logout
+}
+
+# Check if specific image version is already present on Vagrantup so
+# we won't overwrite it.
+check_version_present() {
+	orgname="${1}"
+	repo_version=$(`jq -r '.image_version' ${box_config}`)
+	remote_version=$(vagrant cloud box show "${vagrantcloud_path}" | awk '/current_version/ {print $2}')
+
+	if test "${repo_version}" == "${remote_version}"; then
+		echo "Box version ${remote_version} is already present on Vagrantup"
+		exit 2
+	fi
+}
+
+
 main() {
 	assert_value target ${target} alt-server alt-workstation alt-kworkstation
 	assert_value arch ${arch} i586 x86_64
-	assert_value BASE_VERSION ${BASE_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' 'sisyphus'
-	assert_value TARGET_VERSION ${TARGET_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' 'sisyphus'
+	assert_value BASE_VERSION ${BASE_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' 'sisyphus'
+	assert_value TARGET_VERSION ${TARGET_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' 'sisyphus'
 	assert_value VM_TYPE ${VM_TYPE} qemu onebula vbox
 
 	if test "${BASE_VERSION}" == "sisyphus"; then
@@ -59,7 +84,6 @@ main() {
 		vagrant_arch="amd64"
 	fi
 
-	vagrantcloud_path=${orgname}/${target}-${TARGET_VERSION}-${vagrant_arch}
 	box_file=results/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}.box
 
 	provider="${VM_TYPE}"
@@ -73,14 +97,21 @@ main() {
 	assert_value provider ${provider} virtualbox qemu libvirt
 
 	vagrant cloud auth login --token "${TOKEN}"
+
+	# Check that publish won't overwrite the box.
+	check_version_present
+
 	vagrant cloud publish \
 		${vagrantcloud_path} \
-		`jq -r '.image_version' ./config/${target}-${BASE_VERSION}-${arch}.json` \
+		`jq -r '.image_version' ${box_config}` \
 		${provider} \
 		${box_file} \
 		-f
-	vagrant cloud auth logout
 }
+
+
+# Resource cleanup handler
+trap cleanup EXIT INT HUP
 
 main
 
