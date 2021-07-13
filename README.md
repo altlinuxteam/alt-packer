@@ -48,13 +48,13 @@ and add the necessary kernel module to the list of modules to load:
 For Intel:
 
 ```sh
-echo kvm_intel >> /etc/modules
+echo kvm_intel >> /etc/modules-load.d/kvm.conf
 ```
 
 For AMD:
 
 ```sh
-echo kvm_amd >> /etc/modules
+echo kvm_amd >> /etc/modules/kvm.conf
 ```
 
 You will also need to add user to `vmusers` group for **QEMU**:
