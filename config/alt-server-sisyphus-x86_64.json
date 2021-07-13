@@ -1,12 +1,12 @@
 {
-    "iso_url": "http://ftp.altlinux.ru/pub/distributions/ALTLinux/p9/images/server/alt-server-20190724_beta1-x86_64.iso",
-    "iso_target_path": "alt-server-9-x86_64.iso",
-    "iso_checksum": "4db9a0a69967c8dbee875c6e3ecee59ffee09378",
-    "iso_checksum_type": "sha1",
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p9/images/server/x86_64/alt-server-9.1-x86_64.iso",
+    "iso_target_path": "alt-server-9.1-x86_64.iso",
+    "iso_checksum": "ba8572a44ed3e51f9ef08e64aac42912",
+    "iso_checksum_type": "md5",
     "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
     "metadata": "9-server",
     "descr": "ALT Linux Server Sisyphus x86_64",
-    "image_version": "1.1.0",
+    "image_version": "20210701",
     "with_cloudinit": "1",
     "with_sisyphus": "1"
 }
