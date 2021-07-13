@@ -13,6 +13,12 @@ BASE_VERSION=${BASE_VERSION:-9}
 TARGET_VERSION=${TARGET_VERSION:-9}
 VM_TYPE=${VM_TYPE:-qemu}
 
+# Vagrant Cloud forbade underscores in box names
+vagrant_arch="${arch}"
+if test "${vagrant_arch}" == "x86_64"; then
+	vagrant_arch="amd64"
+fi
+
 # Path to Vagrant box configuration file
 box_config="./config/${target}-${BASE_VERSION}-${arch}.json"
 vagrantcloud_path="${orgname}/${target}-${TARGET_VERSION}-${vagrant_arch}"
@@ -56,9 +62,9 @@ cleanup() {
 # Check if specific image version is already present on Vagrantup so
 # we won't overwrite it.
 check_version_present() {
-	orgname="${1}"
-	repo_version=$(`jq -r '.image_version' ${box_config}`)
-	remote_version=$(vagrant cloud box show "${vagrantcloud_path}" | awk '/current_version/ {print $2}')
+	repo_version=$(jq -r '.image_version' ${box_config})
+	box_info=$(vagrant cloud box show "${vagrantcloud_path}")
+	remote_version=$(echo "${box_info}" | awk '/current_version/ {print $2} /Current Version/ { print $3 }')
 
 	if test "${repo_version}" == "${remote_version}"; then
 		echo "Box version ${remote_version} is already present on Vagrantup"
@@ -76,12 +82,6 @@ main() {
 
 	if test "${BASE_VERSION}" == "sisyphus"; then
 		TARGET_VERSION="sisyphus"
-	fi
-
-	# Vagrant Cloud forbade underscores in box names
-	vagrant_arch="${arch}"
-	if test "${vagrant_arch}" == "x86_64"; then
-		vagrant_arch="amd64"
 	fi
 
 	box_file=results/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}.box
