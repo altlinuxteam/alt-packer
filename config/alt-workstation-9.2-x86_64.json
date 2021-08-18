@@ -1,0 +1,13 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p9/images/workstation/x86_64/alt-workstation-9.2-x86_64.iso",
+    "iso_target_path": "alt-workstation-9.2-x86_64.iso",
+    "iso_checksum": "2e60e7e03cde151ebbb0f789192ff492",
+    "iso_checksum_type": "md5",
+    "boot_cmd": "linux showopts net.ifnames=0 selinux=0 ",
+    "metadata": "9.2-workstation",
+    "descr": "ALT Linux Workstation 9.2 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0"
+}
+
