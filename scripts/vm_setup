@@ -9,12 +9,17 @@ SSH_USER="${SSH_USER:-test}"
 TARGET_REPOS="${TARGET_REPOS:-sisyphus}"
 ARCH="${ARCH:-x86_64}"
 CLOUDINIT="${CLOUDINIT:-0}"
+VAGRANT="${VAGRANT:-0}"
 SISYPHUS="${SISYPHUS:-0}"
 ROOT_PASS="${ROOT_PASS:-123}"
 PASS="${PASS:-123}"
 
 if test "${SISYPHUS}" == "1"; then
 	TARGET_REPOS=sisyphus
+fi
+
+if test "${VM_TYPE}" == "qemu"; then
+	VAGRANT=1
 fi
 
 show_vars() {
@@ -51,7 +56,19 @@ main() {
 		fi
 	fi
 
-	sudo_step "${STEP_DIR}/setup_vagrant"
+	if test "${VM_TYPE}" == "yandex"; then
+		if test "${CLOUDINIT}" == "1"; then
+			sudo_step "${STEP_DIR}/setup_cloudinit"
+			sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
+		fi
+		sudo_step "${STEP_DIR}/setup_agent"
+		sudo_step "${STEP_DIR}/setup_network"
+		sudo_step "${STEP_DIR}/setup_grub2"
+	fi
+
+	if test "${VAGRANT}" == "1"; then
+		sudo_step "${STEP_DIR}/setup_vagrant"
+	fi
 
 	if test "${VM_TYPE}" == "qemu"; then
 		sudo_step "${STEP_DIR}/setup_agent"

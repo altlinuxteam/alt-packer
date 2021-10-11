@@ -1,0 +1,30 @@
+#! /bin/sh
+set -euo pipefail
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+iter=${iter:-alt6}
+YC_BUCKET=${YC_BUCKET:-alt-distr}
+FAMILY=${FAMILY:-alt-server-9}
+PACKER_CACHE_DIR=${PACKER_CACHE_DIR:-./packer_cache}
+target=${target:-alt-server}
+arch=${arch:-x86_64}
+TARGET_VERSION=${TARGET_VERSION:-9.2}
+VM_TYPE=${VM_TYPE:-yandex}
+endpoint=${endpoint:-https://storage.yandexcloud.net}
+
+yc_image_name=${target}-${TARGET_VERSION}-${iter}-${arch}
+yc_image_name=${yc_image_name//[._]/-}
+
+yc_vm_name=${target}-${TARGET_VERSION}
+yc_vm_name=test-${yc_vm_name//[._]/-}
+
+echo "${bold}Remove exiting instance:${normal} ${yc_vm_name}"
+yc compute instance delete --name ${yc_vm_name} || true
+echo "${bold}Removed${normal}"
+
+echo "${bold}Creating instance:${normal} ${yc_vm_name}"
+echo "${bold}Using image:${normal} ${yc_image_name}"
+yc compute instance create ${yc_vm_name} --zone ru-central1-a --memory 3G --cores 2 --core-fraction 20  --platform standard-v3 --preemptible=true --public-ip=true --hostname ${yc_vm_name} --ssh-key ~/.ssh/id_rsa.pub --create-boot-disk image-name=${yc_image_name}
+echo "${bold}Succesful created${normal}"

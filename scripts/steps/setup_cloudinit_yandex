@@ -1,0 +1,6 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Configuring cloud-init for Yandex Cloud"
+curl "http://${PACKER_HTTP_ADDR}/scripts/00_Ec2.cfg" -o "/etc/cloud/cloud.cfg.d/00_Ec2.cfg"
+echo "cloud-init for Yandex Cloud configured"

@@ -51,32 +51,42 @@ class Renderer(renderer.Renderer):
         for iface in network_state.iter_interfaces():
             if iface['type'] == "loopback":
                 continue
+            print(iface)
             iface_name = iface['name']
             subnets = iface.get('subnets', [])
             res = {}
+            dhcp = False
             for s in subnets:
+                if s['type'] == 'dhcp4':
+                    dhcp = True
+                    continue
                 o = res.get('address', [])
                 o.append("%s/%s" % (s['address'], s['prefix']))
                 res['address'] = o
-                if s.has_key('gateway'):
+                if 'gateway' in s:
                     res['gateway'] = "default via %s" % s['gateway']
 
-            if res.has_key('address'):
+            if 'address' in res:
                 path = ipv4_path % ({'base': base_etcnet_dir, 'name': iface_name})
                 content[path] = '\n'.join(res['address'])
 
-            if res.has_key('gateway'):
+            if 'gateway' in res:
                 path = ipv4r_path % ({'base': base_etcnet_dir, 'name': iface_name})
                 content[path] = res['gateway']
 
             opts = [
               "ONBOOT=yes",
               "DISABLED=no",
-              "BOOTPROTO=static",
               "CONFIG_IPV4=yes",
               "CONFIG_WIRELESS=no",
               "TYPE=eth",
               "NM_CONTROLLED=no"]
+            dhcp_opts = ["BOOTPROTO=dhcp\n"]
+            static_opts = ["BOOTPROTO=static\n"]
+            if dhcp:
+                opts += dhcp_opts
+            else:
+                opts += static_opts
             opts_path = options_path % ({'base': base_etcnet_dir, 'name': iface_name})
             content[opts_path] = '\n'.join(opts)
 
