@@ -2,6 +2,8 @@
 set -euo pipefail
 
 echo "Configuring Vagrant user"
+useradd -m vagrant
+echo "vagrant:vagrant" | chpasswd
 mkdir -p /home/vagrant/.ssh
 curl "http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub" -o "/home/vagrant/.ssh/authorized_keys"
 chown -Rv vagrant:vagrant /home/vagrant
