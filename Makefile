@@ -1,8 +1,8 @@
 PACKER_CACHE_DIR := ./packer_cache
 arch = x86_64
-BASE_VERSION = 8.2
+BASE_VERSION = 9.2
 headless = true
-TARGET_VERSION := 8.2
+TARGET_VERSION := 9.2
 target = alt-server
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 # VM_TYPE may be
