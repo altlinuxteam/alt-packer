@@ -59,13 +59,7 @@
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
-; The 'test' user is created for testing purposes and 'vagrant' user is
-; created for Vagrant users. In case you use Vagrant to manage VMs -
-; disable the 'test' user. Otherwise disable 'vagrant' user to secure
-; your VM.
-("/users/create_account" new_name "test" gecos "" allow_su #t auto #f passwd_1 "123" passwd_2 "123")
-("/users/create_account" new_name "vagrant" gecos "" allow_su #t auto #f passwd_1 "vagrant" passwd_2 "vagrant")
 
 ; There is no sshd available in Workstation by default so we enable it
-("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")
-
+("/postinstall/laststate" run "cd $(dirname $AUTOINSTALL); cp-metadata autoinstall.sh; bash ./autoinstall.sh; cd -")
+("/postinstall/firsttime" run "echo 'systemctl enable sshd; systemctl start sshd")

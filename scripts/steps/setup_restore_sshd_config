@@ -1,0 +1,8 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Cleaning OpenSSH server config"
+sed -i '/^PasswordAuthentication/d' /etc/openssh/sshd_config
+sed -i '/^PermitRootLogin/d' /etc/openssh/sshd_config
+echo "Cleaning OpenSSH server config complete"
+

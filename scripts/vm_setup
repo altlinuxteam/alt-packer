@@ -84,6 +84,7 @@ main() {
 		sudo_step "/tmp/install-guest-tools.sh"
 	fi
 
+	sudo_step "${STEP_DIR}/setup_restore_sshd_config"
 	sudo_step "${STEP_DIR}/setup_ssh"
 	sudo_step "${STEP_DIR}/setup_prepare_new_instance"
 	sudo_step "${STEP_DIR}/setup_ansible"
