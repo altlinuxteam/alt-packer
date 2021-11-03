@@ -1,0 +1,13 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/beta/server/alt-server-10.0-alpha-x86_64.iso",
+    "iso_target_path": "alt-server-10-x86_64.iso",
+    "iso_checksum": "24afae4a5ea50894bae5b238fd56b720",
+    "iso_checksum_type": "md5",
+    "boot_cmd": "linux showopts selinux=0 ",
+    "metadata": "9.2-server",
+    "descr": "ALT Linux Server 10 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0"
+}
+
