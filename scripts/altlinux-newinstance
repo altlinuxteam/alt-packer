@@ -1,0 +1,47 @@
+#! /bin/sh
+set -euo pipefail
+
+SYSTEM_UUID=${SYSTEM_UUID:-/etc/system-uuid}
+
+MACHINEID=${MACHINEID:-/etc/machine-id}
+DBUS_MACHINEID=${DBUS_MACHINEID:-/var/lib/dbus/machine-id}
+
+## Write Systemd log
+# $1 = info 
+#      warning
+#      emegr
+sysdlog() {
+	echo $2 | systemd-cat -t altlinux-newinstance -p $1
+}
+
+PREPARE=False
+
+sysdlog info "Detecting new instance"
+if [ -s "$SYSTEM_UUID" ]; then
+	UUID=$(/usr/sbin/dmidecode -s system-uuid)
+	CACHED_UUID=$(cat ${SYSTEM_UUID})
+	if [ "$UUID" = "$CACHED_UUID" ]; then
+		PREPARE=False
+		sysdlog info "New instance not detected. Skipping"
+	else
+		PREPARE=True
+	fi
+else
+	PREPARE=True
+fi
+
+if [ "$PREPARE" = "True" ]; then
+	sysdlog info "System setup for new instance"
+	
+	UUID=$(/usr/sbin/dmidecode -s system-uuid)
+	echo "${UUID}" > ${SYSTEM_UUID}
+	/sbin/systemd-firstboot --delete-root-password --setup-machine-id --force
+	echo "" > ${DBUS_MACHINEID}
+	dbus-uuidgen --ensure
+	rm -rf /etc/udev/rules.d/70-persistent-net.rules
+	find /etc/net/ifaces -mindepth 1 -maxdepth 1 -type d -not -name lo -not -name default -not -name unknown -exec rm -fr {} \;
+	rm -rf /etc/openssh/ssh_host_*
+	echo "run" >> /var/log/newinstance
+	
+	sysdlog info "System setup for new instance complete"
+fi

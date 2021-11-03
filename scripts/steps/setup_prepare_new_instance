@@ -1,0 +1,14 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Setting up new instance service"
+apt-get update
+apt-get -y install dmidecode
+curl "http://${PACKER_HTTP_ADDR}/scripts/altlinux-newinstance" -o "/usr/sbin/altlinux-newinstance"
+curl "http://${PACKER_HTTP_ADDR}/scripts/altlinux-newinstance.service" -o "/lib/systemd/system/altlinux-newinstance.service"
+chown root:root /usr/sbin/altlinux-newinstance
+chmod 755 /usr/sbin/altlinux-newinstance
+chown root:root /lib/systemd/system/altlinux-newinstance.service
+chmod 644 /lib/systemd/system/altlinux-newinstance.service
+ln -s -t /lib/systemd/system/sysinit.target.wants/ ../altlinux-newinstance.service
+echo "Setting up new instance service complete"
