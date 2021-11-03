@@ -50,6 +50,7 @@ main() {
 
 	if test "${VM_TYPE}" == "onebula"; then
 		sudo_step "${STEP_DIR}/setup_onebula"
+		sudo_step "${STEP_DIR}/setup_test_user"
 	else
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
@@ -78,10 +79,12 @@ main() {
 
 	if test "${VM_TYPE}" == "qemu"; then
 		sudo_step "${STEP_DIR}/setup_network"
+		sudo_step "${STEP_DIR}/setup_test_user"
 	fi
 
 	if test "${VM_TYPE}" == "vbox"; then
 		sudo_step "/tmp/install-guest-tools.sh"
+		sudo_step "${STEP_DIR}/setup_test_user"
 	fi
 
 	sudo_step "${STEP_DIR}/setup_restore_sshd_config"

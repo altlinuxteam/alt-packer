@@ -1,5 +1,5 @@
 {
-    "ssh_user": "test",
+    "ssh_user": "root",
     "ssh_pass": "123",
     "vagrant_user": "vagrant",
     "vagrant_pass": "vagrant",

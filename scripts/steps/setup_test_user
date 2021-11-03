@@ -1,0 +1,11 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Configuring Test user"
+useradd -m test
+usermod -aG wheel test
+echo "test:123" | chpasswd
+mkdir -p /home/test/.ssh
+chown -Rv test:test /home/test
+echo "Test user configured"
+
