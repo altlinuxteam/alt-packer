@@ -3,10 +3,13 @@ Description=ALT Linux new instance setup service
 DefaultDependencies=no
 Conflicts=shutdown.target
 After=systemd-remount-fs.service
-Before=systemd-sysusers.service sysinit.target shutdown.target
+Before=systemd-journald.service systemd-sysusers.service sysinit.target shutdown.target
 ConditionPathIsReadWrite=/etc
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/sbin/altlinux-newinstance
+
+[Install]
+WantedBy=sysinit.target
