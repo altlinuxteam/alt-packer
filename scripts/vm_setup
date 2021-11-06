@@ -92,6 +92,7 @@ main() {
 		sudo_step "/tmp/disable_repos.sh"
 		sudo_step "${STEP_DIR}/setup_apt"
 		sudo_step "${STEP_DIR}/setup_onebula"
+		sudo_step "${STEP_DIR}/setup_agent"
 		sudo_step "${STEP_DIR}/setup_udev"
 		sudo_step "${STEP_DIR}/setup_test_user"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
