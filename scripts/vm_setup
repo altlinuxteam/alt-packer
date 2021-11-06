@@ -9,17 +9,12 @@ SSH_USER="${SSH_USER:-test}"
 TARGET_REPOS="${TARGET_REPOS:-sisyphus}"
 ARCH="${ARCH:-x86_64}"
 CLOUDINIT="${CLOUDINIT:-0}"
-VAGRANT="${VAGRANT:-0}"
 SISYPHUS="${SISYPHUS:-0}"
 ROOT_PASS="${ROOT_PASS:-123}"
 PASS="${PASS:-123}"
 
 if test "${SISYPHUS}" == "1"; then
 	TARGET_REPOS=sisyphus
-fi
-
-if test "${VM_TYPE}" == "qemu"; then
-	VAGRANT=1
 fi
 
 show_vars() {
@@ -44,53 +39,96 @@ main() {
 	echo "STEP: setup_sudo"
 	{ sleep 2 ; echo "${ROOT_PASS}" ; } | script -q -c "su -c ${STEP_DIR}/setup_sudo" /dev/null
 
-	sudo_step "/tmp/disable_repos.sh"
-
-	sudo_step "${STEP_DIR}/setup_apt"
-
-	if test "${VM_TYPE}" == "onebula"; then
-		sudo_step "${STEP_DIR}/setup_onebula"
-		sudo_step "${STEP_DIR}/setup_test_user"
-	else
+	if test "${VM_TYPE}" == "qemu"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
+		sudo_step "${STEP_DIR}/setup_agent"
+		sudo_step "${STEP_DIR}/setup_udev"
+		sudo_step "${STEP_DIR}/setup_network"
+		sudo_step "${STEP_DIR}/setup_test_user"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
+	fi
+
+	if test "${VM_TYPE}" == "vbox"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
+		if test "${CLOUDINIT}" == "1"; then
+			sudo_step "${STEP_DIR}/setup_cloudinit"
+		fi
+		sudo_step "${STEP_DIR}/setup_udev"
+		sudo_step "/tmp/install-guest-tools.sh"
+		sudo_step "${STEP_DIR}/setup_test_user"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
 
 	if test "${VM_TYPE}" == "yandex"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 			sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
+		sudo_step "${STEP_DIR}/setup_udev"
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_grub2"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
 
-	if test "${VAGRANT}" == "1"; then
-		sudo_step "${STEP_DIR}/setup_vagrant"
+	if test "${VM_TYPE}" == "onebula"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
+		sudo_step "${STEP_DIR}/setup_onebula"
+		sudo_step "${STEP_DIR}/setup_udev"
+		sudo_step "${STEP_DIR}/setup_test_user"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
 
-	if test "${VM_TYPE}" == "qemu"; then
+	if test "${VM_TYPE}" == "vagrant-qemu"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
+		if test "${CLOUDINIT}" == "1"; then
+			sudo_step "${STEP_DIR}/setup_cloudinit"
+		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-	fi
-
-	sudo_step "${STEP_DIR}/setup_udev"
-
-	if test "${VM_TYPE}" == "qemu"; then
+		sudo_step "${STEP_DIR}/setup_udev"
 		sudo_step "${STEP_DIR}/setup_network"
-		sudo_step "${STEP_DIR}/setup_test_user"
+		sudo_step "${STEP_DIR}/setup_vagrant"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
-
-	if test "${VM_TYPE}" == "vbox"; then
+	
+	if test "${VM_TYPE}" == "vagrant-vbox"; then
+		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_apt"
+		if test "${CLOUDINIT}" == "1"; then
+			sudo_step "${STEP_DIR}/setup_cloudinit"
+		fi
+		sudo_step "${STEP_DIR}/setup_udev"
 		sudo_step "/tmp/install-guest-tools.sh"
-		sudo_step "${STEP_DIR}/setup_test_user"
+		sudo_step "${STEP_DIR}/setup_vagrant"
+		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
+		sudo_step "${STEP_DIR}/setup_ssh"
+		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
+		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
-
-	sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-	sudo_step "${STEP_DIR}/setup_ssh"
-	sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-	sudo_step "${STEP_DIR}/setup_ansible"
 }
 
 show_vars

@@ -53,6 +53,46 @@
         },
 
         {
+            "name": "vagrant-qemu-vm",
+            "type": "qemu",
+            "format": "qcow2",
+            "accelerator": "kvm",
+            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "disk_interface": "virtio-scsi",
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "headless": "{{user `headless`}}",
+            "cpus": 1,
+            "memory": "{{ user `vm_mem` }}",
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{ user `iso_target_path`}}",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "4s",
+            "boot_command": [
+		"<esc><wait><enter><wait>",
+                  "{{ user `boot_cmd` }} ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		"<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
+        {
             "name": "yandex-vm",
             "type": "qemu",
             "format": "qcow2",
@@ -180,7 +220,58 @@
             ],
 
             "format": "ova"
+        },
+
+        {
+            "name": "vagrant-vbox-vm",
+            "type": "virtualbox-iso",
+            "guest_os_type": "Linux_64",
+            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "disk_size": 30000,
+            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "headless": "{{user `headless`}}",
+            "keep_registered": false,
+            "guest_additions_mode": "disable",
+            "cpus": 1,
+            "memory": "{{ user `vm_mem` }}",
+
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_target_path": "{{user `packer_cache_dir`}}/{{ user `iso_target_path`}}",
+
+            "http_port_min": "{{user `http_port_min`}}",
+            "http_port_max": "{{user `http_port_max`}}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "5s",
+            "boot_command": [
+                "<esc><wait><enter><wait>",
+                  "{{ user `boot_cmd` }} ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+                "<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now",
+            "post_shutdown_delay": "10s",
+
+            "export_opts":
+            [
+                "--manifest",
+                "--vsys", "0",
+                "--description", "{{ user `descr` }}",
+                "--version", "{{ user `image_version` }}"
+            ],
+
+            "format": "ova"
         }
+
     ],
 
     "provisioners": [
@@ -201,7 +292,6 @@
                 "TARGET_REPOS={{ user `target_version` }}",
                 "ARCH={{ user `arch` }}",
                 "CLOUDINIT={{ user `with_cloudinit` }}",
-                "VAGRANT={{ user `with_vagrant` }}",
                 "SISYPHUS={{ user `with_sisyphus` }}"
             ]
         }
@@ -215,7 +305,7 @@
         {
             "type": "vagrant",
             "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.box",
-            "only": [ "qemu-vm", "vbox-vm" ]
+            "only": [ "vagrant-qemu-vm", "vagrant-vbox-vm" ]
         },
         {
             "type": "manifest",

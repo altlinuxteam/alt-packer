@@ -50,7 +50,7 @@ main() {
 	assert_value headless ${headless} true false
 	assert_value BASE_VERSION ${BASE_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' '9.2' '10' 'sisyphus'
 	assert_value TARGET_VERSION ${TARGET_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' '9.2' '10' 'sisyphus'
-	assert_value VM_TYPE ${VM_TYPE} qemu onebula vbox yandex
+	assert_value VM_TYPE ${VM_TYPE} qemu onebula vbox vagrant-qemu vagrant-vbox yandex
 	assert_value onerror ${onerror} ask cleanup abort
 
 	if test "${BASE_VERSION}" == "sisyphus"; then
@@ -66,6 +66,7 @@ main() {
 		PACKER_LOG=1 \
 		PACKER_TARGET_VERSION="${TARGET_VERSION}" \
 		PACKER_VM_TYPE="${VM_TYPE}" \
+		PACKER_TMP_DIR="${PACKER_TMP_DIR}" \
 		${build_command} -force -var-file=config/${target}-${BASE_VERSION}-${arch}.json -only=${VM_TYPE}-vm build.json
 }
 

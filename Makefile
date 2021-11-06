@@ -8,7 +8,10 @@ THIS_FILE := $(lastword $(MAKEFILE_LIST))
 # VM_TYPE may be
 # - qemu
 # - vbox
+# - vagrant-qemu
+# - vagrant-vbox
 # - onebula
+# - yandex
 VM_TYPE := qemu
 # on-error may be:
 # - abort - stop and leave everything "as is"

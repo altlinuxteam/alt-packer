@@ -91,6 +91,33 @@ or if you want to build image for **VirtualBox**:
 make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
 ```
 
+## Building images for Vagrant
+
+Use this command to build Vagrant **VirtualBox** box
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=vagrant-vbox
+```
+
+or this command to build Vagrant **QEMU** box
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=vagrant-qemu
+```
+
+## Building images for clouds
+
+Yandex Cloud
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=yandex
+```
+
+OpenNebula
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=onebula
+```
 
 ## Publishing images
 
@@ -98,8 +125,8 @@ You may publish previously built boxes using **Vagrant** software like:
 
 ```sh
 export VAGRANTCLOUD_TOKEN="my_cloud_auth_token"
-make publish orgname=myorg target=alt-server VM_TYPE=vbox BASE_VERSION=9 TARGET_VERSION=9
-make publish orgname=myorg target=alt-workstation VM_TYPE=qemu BASE_VERSION=9 TARGET_VERSION=9
+make publish orgname=myorg target=alt-server VM_TYPE=vagrant-vbox BASE_VERSION=9 TARGET_VERSION=9
+make publish orgname=myorg target=alt-workstation VM_TYPE=vagrant-qemu BASE_VERSION=9 TARGET_VERSION=9
 ```
 
 
