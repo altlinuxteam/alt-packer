@@ -15,10 +15,7 @@ apt-get -qy update
 apt-get -qy install apt rpm
 apt-get -qy dist-upgrade
 apt-get clean
-apt-get install -y qemu-guest-agent cloud-init udev-rule-generator-net
-systemctl unmask qemu-guest-agent
-systemctl enable qemu-guest-agent
-systemctl disable cloud-init
+apt-get install -y udev-rule-generator-net
 rm -f "/etc/apt/sources.list.d/sources.installer.list"
 
 echo "APT configured"

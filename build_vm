@@ -66,7 +66,6 @@ main() {
 		PACKER_LOG=1 \
 		PACKER_TARGET_VERSION="${TARGET_VERSION}" \
 		PACKER_VM_TYPE="${VM_TYPE}" \
-		PACKER_TMP_DIR="${PACKER_TMP_DIR}" \
 		${build_command} -force -var-file=config/${target}-${BASE_VERSION}-${arch}.json -only=${VM_TYPE}-vm build.json
 }
 
