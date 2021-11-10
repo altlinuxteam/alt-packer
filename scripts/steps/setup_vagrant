@@ -2,8 +2,7 @@
 set -euo pipefail
 
 echo "Configuring Vagrant user"
-useradd -m vagrant
-echo "vagrant:vagrant" | chpasswd
+alterator-cmdline -d /users/create_account new_name "vagrant" allow_su true auto true passwd_1 "vagrant" passwd_2 "vagrant"
 mkdir -p /home/vagrant/.ssh
 curl "http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub" -o "/home/vagrant/.ssh/authorized_keys"
 chown -Rv vagrant:vagrant /home/vagrant

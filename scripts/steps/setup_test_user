@@ -2,9 +2,7 @@
 set -euo pipefail
 
 echo "Configuring Test user"
-useradd -m test
-usermod -aG wheel test
-echo "test:123" | chpasswd
+alterator-cmdline -d /users/create_account new_name "test" allow_su true auto true passwd_1 "123" passwd_2 "123"
 mkdir -p /home/test/.ssh
 chown -Rv test:test /home/test
 echo "Test user configured"
