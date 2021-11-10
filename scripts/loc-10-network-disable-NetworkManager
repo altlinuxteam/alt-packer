@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# -------------------------------------------------------------------------- #
+# Copyright 2010-2016, OpenNebula Systems                                    #
+#                                                                            #
+# Licensed under the Apache License, Version 2.0 (the "License"); you may    #
+# not use this file except in compliance with the License. You may obtain    #
+# a copy of the License at                                                   #
+#                                                                            #
+# http://www.apache.org/licenses/LICENSE-2.0                                 #
+#                                                                            #
+# Unless required by applicable law or agreed to in writing, software        #
+# distributed under the License is distributed on an "AS IS" BASIS,          #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   #
+# See the License for the specific language governing permissions and        #
+# limitations under the License.                                             #
+#--------------------------------------------------------------------------- #
+
+## Check context var and disable NetworkManager for contexted interfaces
+
+UDEV_RULES="/etc/udev/rules.d/00-nm-unmanaged.rules"
+USE_NETWORK_MANAGER="${USE_NETWORK_MANAGER:-NO}"
+
+# Return list of interfaces from ONebula context
+get_context_interfaces() {
+	env | grep -E "^(ETH|PCI)[0-9]+_MAC=" | sed 's/_.*$//' | sort
+}
+
+get_lowercase() {
+	echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+# Remove exiting file
+rm -rf ${UDEV_RULES}
+
+# Check context variable
+if test $(get_lowercase $USE_NETWORK_MANAGER) == "yes"; then
+	exit 0
+fi
+
+DEV_LIST=$(get_context_interfaces)
+
+# Set udev rule for each interface
+for dev in $DEV_LIST; do
+	dev_lc=$(get_lowercase $dev)
+	echo "ACTION==\"add\", SUBSYSTEM==\"net\", KERNEL==\"${dev_lc}\", ENV{NM_UNMANAGED}=\"1\"" >> ${UDEV_RULES}
+done
