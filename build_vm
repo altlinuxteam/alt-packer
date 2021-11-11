@@ -2,14 +2,18 @@
 set -euo pipefail
 
 PACKER_CACHE_DIR=${PACKER_CACHE_DIR:-./packer_cache}
-target=${target:-alt-server}
-arch=${arch:-x86_64}
-BASE_VERSION=${BASE_VERSION:-9}
-TARGET_VERSION=${TARGET_VERSION:-9}
-headless=${headless:-false}
-VM_TYPE=${VM_TYPE:-qemu}
-IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
+target=${PACKER_TARGET:-alt-server}
+arch=${PACKER_ARCH:-x86_64}
+BASE_VERSION=${PACKER_BASE_VERSION:-9}
+TARGET_VERSION=${PACKER_TARGET_VERSION:-9}
+headless=${PACKER_HEADLESS:-false}
+VM_TYPE=${PACKER_VM_TYPE:-qemu}
+IMAGE_FILENAME=${PACKER_IMAGE_FILENAME:-alt-server-10-onebula-x86_64}
 EXTENSION=${EXTENSION:-qcow2}
+BUILD_DATE=${PACKER_BUILD_DATE:-""}
+BUILD_DATE_FULL=${PACKER_BUILD_DATE_FULL:-""}
+GIT_TAG=${PACKER_GIT_TAG:-""}
+GIT_HASH=${PACKER_GIT_HASH:-""}
 
 if [[ "${VM_TYPE}" =~ ^(qemu|vagrant-qemu|yandex|onebula)$ ]]; then
 	EXTENSION="qcow2"
@@ -69,7 +73,12 @@ main() {
 	fi
 
 	# Generate image version info file
-	scripts/version
+	env \
+		IMAGE_FILENAME="${IMAGE_FILENAME}" \
+		GIT_TAG="${GIT_TAG}" \
+		GIT_HASH="${GIT_HASH}" \
+		BUILD_DATE_FULL="${BUILD_DATE_FULL}" \
+		scripts/version
 
 	# Clean previously generated hashes
 	rm -rf results/${IMAGE_FILENAME}.md5
@@ -87,10 +96,17 @@ main() {
 		PACKER_VM_TYPE="${VM_TYPE}" \
 		PACKER_IMAGE_FILENAME="${IMAGE_FILENAME}" \
 		${build_command} -force -var-file=config/${target}-${BASE_VERSION}-${arch}.json -only=${VM_TYPE}-vm build.json
+	
+	# Add hashes to previously generated manifest and copy it to images dir
 	echo "MD5: $(cat results/${IMAGE_FILENAME}.md5)" >> scripts/build/image-version
 	echo "SHA1: $(cat results/${IMAGE_FILENAME}.sha1)" >> scripts/build/image-version
 	cp -rf scripts/build/image-version results/${IMAGE_FILENAME}.txt
+
+	# Add generated image filename to file
+	# It is used by other scripts such as publish_vm
+	echo "${IMAGE_FILENAME}" > scripts/build/image-filename
 	
+	# Copy generated image and other files to images dir
 	mv -f results/${IMAGE_FILENAME}.* images/
 }
 

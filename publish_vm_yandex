@@ -4,19 +4,19 @@ set -euo pipefail
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-iter=${iter:-rev1.0}
+iter=${GIT_TAG:-1.0.0}
 YC_BUCKET=${YC_BUCKET:-alt-distr}
-FAMILY=${FAMILY:-alt-server-9}
 PACKER_CACHE_DIR=${PACKER_CACHE_DIR:-./packer_cache}
 target=${target:-alt-server}
 arch=${arch:-x86_64}
 TARGET_VERSION=${TARGET_VERSION:-9.2}
 VM_TYPE=${VM_TYPE:-yandex}
 endpoint=${endpoint:-https://storage.yandexcloud.net}
-IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
+IMAGE_FILENAME=${IMAGE_FILENAME:-""}
+FAMILY=${FAMILY:-$target-$TARGET_VERSION}
 
-yc_image_name=${target}-${TARGET_VERSION}-${iter}-${arch}
-yc_image_name=${yc_image_name//[._]/-}
+yc_image_name=${target}-${TARGET_VERSION}-rev${iter}-${arch}
+yc_image_name=${yc_image_name//x86_64/amd64}
 
 echo "QCOW2 image: images/${IMAGE_FILENAME}.qcow2"
 
@@ -25,7 +25,7 @@ echo "URI: ${endpoint}/${YC_BUCKET}/${yc_image_name}.qcow2"
 echo "Yandex Cloud S3 Bucket: ${YC_BUCKET}"
 echo "Family: ${FAMILY}"
 echo "Distributive version: ${TARGET_VERSION}"
-echo "Iteration: ${iter}"
+echo "Revision: ${iter}"
 echo ""
 
 echo "${bold}Uploading into Yandex Cloud S3 Storage...${normal}"

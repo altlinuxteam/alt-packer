@@ -12,7 +12,8 @@ arch=${arch:-x86_64}
 BASE_VERSION=${BASE_VERSION:-9}
 TARGET_VERSION=${TARGET_VERSION:-9}
 VM_TYPE=${VM_TYPE:-qemu}
-IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
+IMAGE_FILENAME=${IMAGE_FILENAME:-""}
+GIT_TAG=${GIT_TAG:-1.0.0}
 
 # Vagrant Cloud forbade underscores in box names
 vagrant_arch="${arch}"
@@ -63,7 +64,7 @@ cleanup() {
 # Check if specific image version is already present on Vagrantup so
 # we won't overwrite it.
 check_version_present() {
-	repo_version=$(jq -r '.image_version' ${box_config})
+	repo_version=${GIT_TAG}
 	box_info=$(vagrant cloud box show "${vagrantcloud_path}")
 	remote_version=$(echo "${box_info}" | awk '/current_version/ {print $2} /Current Version/ { print $3 }')
 
@@ -107,7 +108,7 @@ main() {
 
 	vagrant cloud publish \
 		${vagrantcloud_path} \
-		`jq -r '.image_version' ${box_config}` \
+		${GIT_TAG} \
 		${provider} \
 		${box_file} \
 		-f
