@@ -8,6 +8,17 @@ BASE_VERSION=${BASE_VERSION:-9}
 TARGET_VERSION=${TARGET_VERSION:-9}
 headless=${headless:-false}
 VM_TYPE=${VM_TYPE:-qemu}
+IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
+EXTENSION=${EXTENSION:-qcow2}
+
+if [[ "${VM_TYPE}" =~ ^(qemu|vagrant-qemu|yandex|onebula)$ ]]; then
+	EXTENSION="qcow2"
+fi
+
+if [[ "${VM_TYPE}" =~ ^(vbox|vagrant-vbox)$ ]]; then
+        EXTENSION="ova"
+fi
+
 # on-error may be:
 # - abort - stop and leave everything "as is"
 # - cleanup - is the default behavior
@@ -57,6 +68,11 @@ main() {
 		TARGET_VERSION="sisyphus"
 	fi
 
+	# Clean previously generated hashes
+	rm -rf results/${IMAGE_FILENAME}.md5
+	rm -rf results/${IMAGE_FILENAME}.sha1
+	
+	# Run packer binary
 	env \
 		PACKER_CACHE_DIR="${PACKER_CACHE_DIR}" \
 		PACKER_TARGET="${target}" \
@@ -66,7 +82,10 @@ main() {
 		PACKER_LOG=1 \
 		PACKER_TARGET_VERSION="${TARGET_VERSION}" \
 		PACKER_VM_TYPE="${VM_TYPE}" \
+		PACKER_IMAGE_FILENAME="${IMAGE_FILENAME}" \
 		${build_command} -force -var-file=config/${target}-${BASE_VERSION}-${arch}.json -only=${VM_TYPE}-vm build.json
+	
+	mv -f results/${IMAGE_FILENAME}.* images/
 }
 
 main

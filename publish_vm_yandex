@@ -4,7 +4,7 @@ set -euo pipefail
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-iter=${iter:-alt5}
+iter=${iter:-rev1.0}
 YC_BUCKET=${YC_BUCKET:-alt-distr}
 FAMILY=${FAMILY:-alt-server-9}
 PACKER_CACHE_DIR=${PACKER_CACHE_DIR:-./packer_cache}
@@ -13,14 +13,15 @@ arch=${arch:-x86_64}
 TARGET_VERSION=${TARGET_VERSION:-9.2}
 VM_TYPE=${VM_TYPE:-yandex}
 endpoint=${endpoint:-https://storage.yandexcloud.net}
+IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
 
 yc_image_name=${target}-${TARGET_VERSION}-${iter}-${arch}
 yc_image_name=${yc_image_name//[._]/-}
 
-echo "QCOW2 image: ${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}"
+echo "QCOW2 image: images/${IMAGE_FILENAME}.qcow2"
 
-echo "Name: ${target}-${TARGET_VERSION}-${iter}-${arch}"
-echo "URI: ${endpoint}/${YC_BUCKET}/${target}-${TARGET_VERSION}-${iter}-${arch}"
+echo "Name: ${yc_image_name}"
+echo "URI: ${endpoint}/${YC_BUCKET}/${yc_image_name}.qcow2"
 echo "Yandex Cloud S3 Bucket: ${YC_BUCKET}"
 echo "Family: ${FAMILY}"
 echo "Distributive version: ${TARGET_VERSION}"
@@ -28,10 +29,10 @@ echo "Iteration: ${iter}"
 echo ""
 
 echo "${bold}Uploading into Yandex Cloud S3 Storage...${normal}"
-aws --endpoint-url=${endpoint} s3 cp ${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch} s3://${YC_BUCKET}/${target}-${TARGET_VERSION}-${iter}-${arch}
+aws --endpoint-url=${endpoint} s3 cp images/${IMAGE_FILENAME}.qcow2 s3://${YC_BUCKET}/${yc_image_name}.qcow2
 echo "${bold}Upload complite${normal}"
 echo ""
 
 echo "${bold}Creating Yandex Cloud image...${normal}"
-yc compute image create --name "${yc_image_name}" --source-uri "${endpoint}/${YC_BUCKET}/${target}-${TARGET_VERSION}-${iter}-${arch}" --family "${FAMILY}"
-echo "${bold}Image created:${normal} ${target}-${TARGET_VERSION}-${iter}-${arch}"
+yc compute image create --name "${yc_image_name}" --source-uri "${endpoint}/${YC_BUCKET}/${yc_image_name}.qcow2" --family "${FAMILY}"
+echo "${bold}Image created:${normal} ${yc_image_name}"

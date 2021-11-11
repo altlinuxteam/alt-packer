@@ -8,7 +8,8 @@
         "target_version": "{{env `PACKER_TARGET_VERSION`}}",
         "apt_sources": "{{env `PACKER_APT_SOURCES`}}",
         "vm_type": "{{env `PACKER_VM_TYPE`}}",
-        "root_password": "123"
+        "root_password": "123",
+        "vm_name_full": "{{env `PACKER_IMAGE_FILENAME`}}"
     },
 
     "builders": [
@@ -17,11 +18,11 @@
             "type": "qemu",
             "format": "qcow2",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "vm_name": "{{ user `vm_name_full` }}.qcow2",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -49,6 +50,7 @@
 		"<wait><enter>"
             ],
 
+            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -57,11 +59,11 @@
             "type": "qemu",
             "format": "qcow2",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "vm_name": "{{ user `vm_name_full` }}.qcow2",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -89,6 +91,7 @@
 		"<wait><enter>"
             ],
 
+            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -97,11 +100,11 @@
             "type": "qemu",
             "format": "qcow2",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "vm_name": "{{ user `vm_name_full` }}.qcow2",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -129,6 +132,7 @@
 		"<wait><enter>"
             ],
 
+            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -137,11 +141,11 @@
             "name": "onebula-vm",
             "type": "qemu",
             "accelerator": "kvm",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "vm_name": "{{ user `vm_name_full` }}.qcow2",
             "disk_size": 30000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "cpus": 1,
             "memory": "{{ user `vm_mem` }}",
@@ -169,6 +173,7 @@
 		"<wait><enter>"
             ],
 
+            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -176,9 +181,9 @@
             "name": "vbox-vm",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "vm_name": "{{ user `vm_name_full` }}",
             "disk_size": 30000,
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
             "guest_additions_mode": "disable",
@@ -226,9 +231,9 @@
             "name": "vagrant-vbox-vm",
             "type": "virtualbox-iso",
             "guest_os_type": "Linux_64",
-            "vm_name": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "vm_name": "{{ user `vm_name_full` }}",
             "disk_size": 30000,
-            "output_directory": "{{ user `vm_type` }}-{{ user `target` }}-{{user `target_version`}}-{{user `arch`}}",
+            "output_directory": "results",
             "headless": "{{user `headless`}}",
             "keep_registered": false,
             "guest_additions_mode": "disable",
@@ -300,11 +305,11 @@
         {
             "type": "checksum",
             "checksum_types": [ "md5", "sha1" ],
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.{{.ChecksumType}}"
+            "output": "results/{{ user `vm_name_full` }}.{{.ChecksumType}}"
         },
         {
             "type": "vagrant",
-            "output": "results/{{ user `vm_type` }}-{{ user `target` }}-{{ user `target_version` }}-{{ user `arch` }}.box",
+            "output": "results/{{ user `vm_name_full` }}.box",
             "only": [ "vagrant-qemu-vm", "vagrant-vbox-vm" ]
         },
         {

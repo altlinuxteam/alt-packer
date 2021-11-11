@@ -12,6 +12,7 @@ arch=${arch:-x86_64}
 BASE_VERSION=${BASE_VERSION:-9}
 TARGET_VERSION=${TARGET_VERSION:-9}
 VM_TYPE=${VM_TYPE:-qemu}
+IMAGE_FILENAME=${target}-${BASE_VERSION}-${VM_TYPE}-${arch}
 
 # Vagrant Cloud forbade underscores in box names
 vagrant_arch="${arch}"
@@ -84,7 +85,7 @@ main() {
 		TARGET_VERSION="sisyphus"
 	fi
 
-	box_file=results/${VM_TYPE}-${target}-${TARGET_VERSION}-${arch}.box
+	box_file=images/${IMAGE_FILENAME}.box
 
 	provider="${VM_TYPE}"
 	if test "${VM_TYPE}" == "vagrant-vbox"; then
