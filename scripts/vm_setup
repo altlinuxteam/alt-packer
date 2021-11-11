@@ -132,6 +132,8 @@ main() {
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
 		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
+
+	sudo_step "${STEP_DIR}/setup_version"
 }
 
 show_vars

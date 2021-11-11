@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Setting up image build info"
+curl "http://${PACKER_HTTP_ADDR}/scripts/build/image-version" -o "/etc/image-version"
+chmod 644 /etc/image-version
+echo "Setting up image build info complete"

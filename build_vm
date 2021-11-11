@@ -68,6 +68,9 @@ main() {
 		TARGET_VERSION="sisyphus"
 	fi
 
+	# Generate image version info file
+	scripts/version
+
 	# Clean previously generated hashes
 	rm -rf results/${IMAGE_FILENAME}.md5
 	rm -rf results/${IMAGE_FILENAME}.sha1
@@ -84,6 +87,9 @@ main() {
 		PACKER_VM_TYPE="${VM_TYPE}" \
 		PACKER_IMAGE_FILENAME="${IMAGE_FILENAME}" \
 		${build_command} -force -var-file=config/${target}-${BASE_VERSION}-${arch}.json -only=${VM_TYPE}-vm build.json
+	echo "MD5: $(cat results/${IMAGE_FILENAME}.md5)" >> scripts/build/image-version
+	echo "SHA1: $(cat results/${IMAGE_FILENAME}.sha1)" >> scripts/build/image-version
+	cp -rf scripts/build/image-version results/${IMAGE_FILENAME}.txt
 	
 	mv -f results/${IMAGE_FILENAME}.* images/
 }
