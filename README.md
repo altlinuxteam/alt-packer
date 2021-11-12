@@ -5,6 +5,7 @@
 * [Overview](#overview)
 * [Preparation](#preparation)
 * [Building images](#building-images)
+* [Images location and naming](#images-location-and-naming)
 * [Publishing images](#publishing-images)
 * [Syncing images](#syncing-images)
 * [Using images with Vagrant](#using-images-with-vagrant)
@@ -79,6 +80,8 @@ necessary ISOs into it.
 
 ## Building images
 
+### Building default images
+
 You may start building image for **QEMU** like:
 
 ```sh
@@ -91,7 +94,7 @@ or if you want to build image for **VirtualBox**:
 make image target=alt-server headless=false BASE_VERSION=9 TARGET_VERSION=9 VM_TYPE=vbox
 ```
 
-## Building images for Vagrant
+### Building images for Vagrant
 
 Use this command to build Vagrant **VirtualBox** box
 
@@ -105,7 +108,7 @@ or this command to build Vagrant **QEMU** box
 make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=vagrant-qemu
 ```
 
-## Building images for clouds
+### Building images for clouds
 
 Yandex Cloud
 
@@ -119,16 +122,29 @@ OpenNebula
 make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=onebula
 ```
 
+## Images location and naming
+
+All images are located in the ./images directory.
+By default, the current date and git tag are appended to the image name. If there is no tag, hash of the current commit is added.
+
+If necessary, the tag, hash, and date can be overridden using environment variables ```GIT_TAG```, ```GIT_HASH```, ```GIT_DATE```.
+Like this:
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=yandex GIT_TAG=1.0.1 GIT_DATE=20210623
+```
+
 ## Publishing images
 
 You may publish previously built boxes using **Vagrant** software like:
 
 ```sh
 export VAGRANTCLOUD_TOKEN="my_cloud_auth_token"
-make publish orgname=myorg target=alt-server VM_TYPE=vagrant-vbox BASE_VERSION=9 TARGET_VERSION=9
-make publish orgname=myorg target=alt-workstation VM_TYPE=vagrant-qemu BASE_VERSION=9 TARGET_VERSION=9
+make publish_vagrant orgname=myorg target=alt-server VM_TYPE=vagrant-vbox BASE_VERSION=9 TARGET_VERSION=9 GIT_TAG=1.0.0 GIT_DATE=20210623
+make publish_vagrant orgname=myorg target=alt-workstation VM_TYPE=vagrant-qemu BASE_VERSION=9 TARGET_VERSION=9 GIT_TAG=1.0.0 GIT_DATE=20210623
 ```
 
+Variables GIT_DATE, GIT_TAG or GIT_HASH must match the variables that were specified when building the desired image.
 
 ## Syncing images
 
