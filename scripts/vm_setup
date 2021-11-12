@@ -47,7 +47,9 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_root"
 		sudo_step "${STEP_DIR}/setup_test_user"
@@ -63,7 +65,9 @@ main() {
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "/tmp/install-guest-tools.sh"
 		sudo_step "${STEP_DIR}/setup_test_user"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
@@ -84,7 +88,9 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_grub2"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
@@ -98,7 +104,9 @@ main() {
 		sudo_step "${STEP_DIR}/setup_apt"
 		sudo_step "${STEP_DIR}/setup_onebula"
 		sudo_step "${STEP_DIR}/setup_agent"
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "${STEP_DIR}/setup_test_user"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
 		sudo_step "${STEP_DIR}/setup_ssh"
@@ -113,7 +121,9 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_root"
 		sudo_step "${STEP_DIR}/setup_vagrant"
@@ -129,7 +139,9 @@ main() {
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
-		sudo_step "${STEP_DIR}/setup_udev"
+		if test "${BASE_VERSION:0:1}" -le "9"; then
+			sudo_step "${STEP_DIR}/setup_udev"
+		fi
 		sudo_step "/tmp/install-guest-tools.sh"
 		sudo_step "${STEP_DIR}/setup_vagrant"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
