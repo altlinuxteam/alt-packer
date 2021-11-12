@@ -1,0 +1,12 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Configuring cloud-init"
+apt-get -y install cloud-init
+mkdir -p /usr/lib/python3/site-packages/cloudinit/net
+curl "http://${PACKER_HTTP_ADDR}/scripts/etcnet_10.py" -o "/usr/lib/python3/site-packages/cloudinit/net/etcnet.py"
+curl "http://${PACKER_HTTP_ADDR}/scripts/altlinux_10.py" -o "/usr/lib/python3/site-packages/cloudinit/distros/altlinux.py"
+curl "http://${PACKER_HTTP_ADDR}/scripts/01_network_renderers.cfg" -o "/etc/cloud/cloud.cfg.d/01_network_renderers.cfg"
+systemctl enable cloud-init
+echo "cloud-init configured"
+

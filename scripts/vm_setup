@@ -5,6 +5,7 @@ set -euo pipefail
 STEP_DIR="${STEP_DIR:-/tmp/steps}"
 TARGET="${TARGET:-alt-server}"
 VM_TYPE="${VM_TYPE:-qemu}"
+BASE_VERSION="${BASE_VERSION:-10}"
 SSH_USER="${SSH_USER:-test}"
 TARGET_REPOS="${TARGET_REPOS:-sisyphus}"
 ARCH="${ARCH:-x86_64}"
@@ -75,7 +76,11 @@ main() {
 		sudo_step "/tmp/disable_repos.sh"
 		sudo_step "${STEP_DIR}/setup_apt"
 		if test "${CLOUDINIT}" == "1"; then
-			sudo_step "${STEP_DIR}/setup_cloudinit"
+			if test "${BASE_VERSION}" == "9.2"; then
+				sudo_step "${STEP_DIR}/setup_cloudinit"
+			else
+				sudo_step "${STEP_DIR}/setup_cloudinit_10"
+			fi
 			sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"

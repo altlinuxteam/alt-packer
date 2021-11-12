@@ -14,7 +14,7 @@ TARGET_VERSION=${TARGET_VERSION:-9.2}
 VM_TYPE=${VM_TYPE:-yandex}
 endpoint=${endpoint:-https://storage.yandexcloud.net}
 
-yc_image_name=${target}-${TARGET_VERSION}-${iter}-${arch}
+yc_image_name=${1:-$target-$TARGET_VERSION-$iter-$arch}
 yc_image_name=${yc_image_name//[._]/-}
 
 yc_vm_name=${target}-${TARGET_VERSION}

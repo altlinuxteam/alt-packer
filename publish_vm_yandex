@@ -17,6 +17,7 @@ FAMILY=${FAMILY:-$target-$TARGET_VERSION}
 
 yc_image_name=${target}-${TARGET_VERSION}-rev${iter}-${arch}
 yc_image_name=${yc_image_name//x86_64/amd64}
+yc_image_name=${yc_image_name//./-}
 
 echo "QCOW2 image: images/${IMAGE_FILENAME}.qcow2"
 

@@ -293,6 +293,7 @@
                 "PASS='{{ user `ssh_pass` }}'",
                 "SSH_USER='{{ user `ssh_user` }}'",
                 "VM_TYPE={{ user `vm_type` }}",
+                "BASE_VERSION={{ user `base_version` }}",
                 "TARGET={{ user `target` }}",
                 "TARGET_REPOS={{ user `target_version` }}",
                 "ARCH={{ user `arch` }}",
