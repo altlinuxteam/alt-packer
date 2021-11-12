@@ -131,6 +131,7 @@ main() {
 		sudo_step "${STEP_DIR}/setup_ssh"
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
 		sudo_step "${STEP_DIR}/setup_ansible"
+		sudo_step "${STEP_DIR}/setup_altlinux_release"
 	fi
 	
 	if test "${VM_TYPE}" == "vagrant-vbox"; then
@@ -148,6 +149,7 @@ main() {
 		sudo_step "${STEP_DIR}/setup_ssh"
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
 		sudo_step "${STEP_DIR}/setup_ansible"
+		sudo_step "${STEP_DIR}/setup_altlinux_release"
 	fi
 
 	sudo_step "${STEP_DIR}/setup_version"

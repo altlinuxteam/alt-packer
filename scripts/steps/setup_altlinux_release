@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Updating altlinux-release file"
+. /etc/os-release
+echo "${PRETTY_NAME}" > /etc/altlinux-release
+echo "altlinux-release file updated"
