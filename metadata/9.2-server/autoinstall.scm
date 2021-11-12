@@ -51,6 +51,7 @@
 ; building VMs using this autoinstall scripts.
 ("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
 ("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
+("/net-eth" action "write" name "eth1" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
