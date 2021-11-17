@@ -3,5 +3,6 @@ set -euo pipefail
 
 echo "Setting up NetworkManager for OpenNebula"
 curl "http://${PACKER_HTTP_ADDR}/scripts/loc-10-network-disable-NetworkManager" -o "/etc/one-context.d/loc-10-network-disable-NetworkManager"
+curl "http://${PACKER_HTTP_ADDR}/scripts/00-nm-unmanaged.rules" -o "/etc/udev/rules.d/00-nm-unmanaged.rules"
 chmod +x /etc/one-context.d/loc-10-network-disable-NetworkManager
 echo "Setting up NetworkManager for OpenNebula complete"
