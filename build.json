@@ -50,7 +50,6 @@
 		"<wait><enter>"
             ],
 
-            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -91,7 +90,6 @@
 		"<wait><enter>"
             ],
 
-            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -132,7 +130,6 @@
 		"<wait><enter>"
             ],
 
-            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
@@ -140,6 +137,7 @@
         {
             "name": "onebula-vm",
             "type": "qemu",
+            "format": "qcow2",
             "accelerator": "kvm",
             "vm_name": "{{ user `vm_name_full` }}.qcow2",
             "disk_size": 30000,
@@ -173,13 +171,13 @@
 		"<wait><enter>"
             ],
 
-            "format": "qcow2",
             "shutdown_command": "sudo shutdown -P now"
         },
 
         {
             "name": "vbox-vm",
             "type": "virtualbox-iso",
+            "format": "ova",
             "guest_os_type": "Linux_64",
             "vm_name": "{{ user `vm_name_full` }}",
             "disk_size": 30000,
@@ -222,14 +220,13 @@
                 "--vsys", "0",
                 "--description", "{{ user `descr` }}",
                 "--version", "{{ user `image_version` }}"
-            ],
-
-            "format": "ova"
+            ]
         },
 
         {
             "name": "vagrant-vbox-vm",
             "type": "virtualbox-iso",
+            "format": "ova",
             "guest_os_type": "Linux_64",
             "vm_name": "{{ user `vm_name_full` }}",
             "disk_size": 30000,
@@ -272,9 +269,7 @@
                 "--vsys", "0",
                 "--description", "{{ user `descr` }}",
                 "--version", "{{ user `image_version` }}"
-            ],
-
-            "format": "ova"
+            ]
         }
 
     ],
