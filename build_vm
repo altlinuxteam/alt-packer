@@ -102,11 +102,11 @@ main() {
 	echo "SHA1: $(cat results/${IMAGE_FILENAME}.sha1)" >> scripts/build/image-version
 	cp -rf scripts/build/image-version results/${IMAGE_FILENAME}.txt
 
-	# Add generated image filename to file
-	# It is used by other scripts such as publish_vm
-	echo "${IMAGE_FILENAME}" > scripts/build/image-filename
-	
 	# Copy generated image and other files to images dir
+	mkdir -p images/manifests
+	mv -f results/${IMAGE_FILENAME}.md5 images/manifests/
+	mv -f results/${IMAGE_FILENAME}.sha1 images/manifests/
+	mv -f results/${IMAGE_FILENAME}.txt images/manifests/
 	mv -f results/${IMAGE_FILENAME}.* images/
 }
 
