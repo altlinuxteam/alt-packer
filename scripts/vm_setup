@@ -104,9 +104,6 @@ main() {
 		sudo_step "${STEP_DIR}/setup_apt"
 		sudo_step "${STEP_DIR}/setup_onebula"
 		sudo_step "${STEP_DIR}/setup_agent"
-		if test "${BASE_VERSION:0:1}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
-		fi
 		sudo_step "${STEP_DIR}/setup_etcnet_clean"
 		sudo_step "${STEP_DIR}/setup_onebula_disable_NetworkManager"
 		sudo_step "${STEP_DIR}/setup_systemd-networkd"
