@@ -1,0 +1,8 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Setting up systemd-networkd"
+apt-get install -y systemd-networkd
+systemctl enable systemd-networkd
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+echo "Setting up systemd-networkd complete"

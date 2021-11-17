@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Cleaning etcnet ifaces directory"
+rm -rf /etc/net/ifaces/eth*
+rm -rf /etc/net/ifaces/enp*
+echo "Etcnet ifaces directory cleaned"
