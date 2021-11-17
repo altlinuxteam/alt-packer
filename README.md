@@ -37,6 +37,7 @@ Install the following dependencies:
 * **wget**
 * **qemu-kvm**
 * **qemu-ui-sdl**
+* **qemu-ui-gtk**
 * **virtualbox**
 * **packer**
 * **vagrant** (only if you plan to distribute boxes via Vagrant Cloud)
