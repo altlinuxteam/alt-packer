@@ -35,7 +35,7 @@ if [ "$PREPARE" = "True" ]; then
 	
 	UUID=$(/usr/sbin/dmidecode -s system-uuid)
 	echo "${UUID}" > ${SYSTEM_UUID}
-	/sbin/systemd-firstboot --delete-root-password --setup-machine-id --force
+	echo "$(dbus-uuidgen)" > ${MACHINEID}
 	echo "" > ${DBUS_MACHINEID}
 	dbus-uuidgen --ensure
 	rm -rf /etc/openssh/ssh_host_*
