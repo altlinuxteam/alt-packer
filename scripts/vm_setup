@@ -47,7 +47,7 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		if test "${BASE_VERSION:0:1}" -le "9"; then
+		if test "${BASE_VERSION//.*/}" -le "9"; then
 			sudo_step "${STEP_DIR}/setup_udev"
 		fi
 		sudo_step "${STEP_DIR}/setup_network"
@@ -65,7 +65,7 @@ main() {
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
-		if test "${BASE_VERSION:0:1}" -le "9"; then
+		if test "${BASE_VERSION//.*/}" -le "9"; then
 			sudo_step "${STEP_DIR}/setup_udev"
 		fi
 		sudo_step "/tmp/install-guest-tools.sh"
@@ -88,7 +88,7 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		if test "${BASE_VERSION:0:1}" -le "9"; then
+		if test "${BASE_VERSION//.*/}" -le "9"; then
 			sudo_step "${STEP_DIR}/setup_udev"
 		fi
 		sudo_step "${STEP_DIR}/setup_network"
@@ -121,7 +121,7 @@ main() {
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
 		sudo_step "${STEP_DIR}/setup_agent"
-		if test "${BASE_VERSION:0:1}" -le "9"; then
+		if test "${BASE_VERSION//.*/}" -le "9"; then
 			sudo_step "${STEP_DIR}/setup_udev"
 		fi
 		sudo_step "${STEP_DIR}/setup_network"
@@ -140,7 +140,7 @@ main() {
 		if test "${CLOUDINIT}" == "1"; then
 			sudo_step "${STEP_DIR}/setup_cloudinit"
 		fi
-		if test "${BASE_VERSION:0:1}" -le "9"; then
+		if test "${BASE_VERSION//.*/}" -le "9"; then
 			sudo_step "${STEP_DIR}/setup_udev"
 		fi
 		sudo_step "/tmp/install-guest-tools.sh"
