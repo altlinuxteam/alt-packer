@@ -89,22 +89,23 @@ class Distro(distros.Distro):
 
     def create_user(self, name, **kwargs):
         groups = kwargs.get('groups')
-        if groups:
-            if isinstance(groups, str):
-                groups = groups.split(",")
+        if 'sudo' in kwargs and kwargs['sudo'] is not False:
+            if groups:
+                if isinstance(groups, str):
+                    groups = groups.split(",")
 
-            # remove any white spaces in group names, most likely
-            # that came in as a string like: groups: group1, group2
-            groups = [g.strip() for g in groups]
+                # remove any white spaces in group names, most likely
+                # that came in as a string like: groups: group1, group2
+                groups = [g.strip() for g in groups]
 
-            # Add wheel group. Fix sudoers
-            groups.append('wheel')
+                # Add wheel group. Fix sudoers
+                groups.append('wheel')
 
-            # kwargs.items loop below wants a comma delimeted string
-            # that can go right through to the command.
-            kwargs['groups'] = ",".join(groups)
-        else:
-            kwargs['groups'] = "wheel"
+                # kwargs.items loop below wants a comma delimeted string
+                # that can go right through to the command.
+                kwargs['groups'] = ",".join(groups)
+            else:
+                kwargs['groups'] = "wheel"
         return super().create_user(name, **kwargs)
 
     def install_packages(self, pkglist):
