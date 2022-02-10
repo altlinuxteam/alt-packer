@@ -1,0 +1,6 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Setting up VirtIOFS kernel module loading on boot"
+echo "virtiofs" >> /etc/modules
+echo "Setting up VirtIOFS kernel module loading on boot complete"
