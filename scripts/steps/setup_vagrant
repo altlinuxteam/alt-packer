@@ -6,5 +6,6 @@ alterator-cmdline -d /users/create_account new_name "vagrant" allow_su true auto
 mkdir -p /home/vagrant/.ssh
 curl "http://${PACKER_HTTP_ADDR}/pubkeys/vagrant.pub" -o "/home/vagrant/.ssh/authorized_keys"
 chown -Rv vagrant:vagrant /home/vagrant
+gpasswd -a vagrant wheel
 echo "Vagrant user configured"
 
