@@ -2,13 +2,9 @@
 set -euo pipefail
 
 echo "Setting up new instance service"
+apt-repo add 295876
 apt-get update
-apt-get -y install dmidecode
-curl "http://${PACKER_HTTP_ADDR}/scripts/altlinux-newinstance" -o "/usr/sbin/altlinux-newinstance"
-curl "http://${PACKER_HTTP_ADDR}/scripts/altlinux-newinstance.service" -o "/lib/systemd/system/altlinux-newinstance.service"
-chown root:root /usr/sbin/altlinux-newinstance
-chmod 755 /usr/sbin/altlinux-newinstance
-chown root:root /lib/systemd/system/altlinux-newinstance.service
-chmod 644 /lib/systemd/system/altlinux-newinstance.service
-ln -s -t /lib/systemd/system/sysinit.target.wants/ ../altlinux-newinstance.service
+apt-get -y install altlinux-new-instance
+systemctl enable altlinux-new-instance
+apt-repo rm 295876
 echo "Setting up new instance service complete"
