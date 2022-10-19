@@ -93,6 +93,7 @@ main() {
 		fi
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_grub2"
+		sudo_step "${STEP_DIR}/setup_grub2_fixed_eth_names"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
 		sudo_step "${STEP_DIR}/setup_ssh"
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
@@ -117,6 +118,7 @@ main() {
 		fi
 		sudo_step "${STEP_DIR}/setup_network"
 		sudo_step "${STEP_DIR}/setup_grub2"
+		sudo_step "${STEP_DIR}/setup_grub2_fixed_eth_names"
 		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
 		sudo_step "${STEP_DIR}/setup_ssh"
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
