@@ -2,6 +2,7 @@
   (title . "Setup for workstation")
   (action . trivial)
   (actiondata 
-               ("/" (size 20971520 . 20971520 ) (fsim . "Ext2/3") (methods plain))
-               ;("/var" (size 1024000 . #t) (fsim . "Ext2/3") (methods  plain))
+               ; Disk size in sectors
+	       ; Calculating: disk_size (M) * 1024 * 2 - 4096
+               ("/" (size 10235904 . #t ) (fsim . "Ext2/3") (methods plain))
                )))

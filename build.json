@@ -99,7 +99,7 @@
             "format": "qcow2",
             "accelerator": "kvm",
             "vm_name": "{{ user `vm_name_full` }}.qcow2",
-            "disk_size": 30000,
+            "disk_size": 5000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
             "output_directory": "results",
@@ -132,7 +132,6 @@
 
             "shutdown_command": "sudo shutdown -P now"
         },
-
 
         {
             "name": "onebula-vm",
