@@ -78,6 +78,7 @@ main() {
 
 	if test "${VM_TYPE}" == "yandex"; then
 		sudo_step "/tmp/disable_repos.sh"
+		sudo_step "${STEP_DIR}/setup_minimalize"
 		sudo_step "${STEP_DIR}/setup_apt"
 		if test "${CLOUDINIT}" == "1"; then
 			if test "${BASE_VERSION}" == "9.2"; then
@@ -98,6 +99,7 @@ main() {
 		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
 		sudo_step "${STEP_DIR}/setup_virtiofs"
 		sudo_step "${STEP_DIR}/setup_etcnet_clean"
+		sudo_step "${STEP_DIR}/setup_remove_unnecessary_locales"
 		sudo_step "${STEP_DIR}/setup_reset_root_password"
 	fi
 

@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Removing unnecessary locales for clouds"
+find /usr/lib/locale/ -mindepth 1 -maxdepth 1 -not -name ru* -not -name en_US* -not -name C* -exec rm -rf {} \;
+echo "Unnecessary locales removed"
+

@@ -1,0 +1,56 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Minimalize VM for clouds"
+apt-get remove -y -D \
+	docs-alt-server \
+	dosfstools \
+	eject \
+	fatresize \
+	firmware-aic94xx-seq \
+	firmware-intel-ucode \
+	firmware-intel-ucode \
+	firmware-ql6312 \
+	fonts-ttf-google-croscore-arimo \
+	fonts-ttf-google-croscore-common \
+	hdparm \
+	indexhtml-common \
+	iucode_tool \
+	jfsutils \
+	kernel-modules-virtualbox-std-def \
+	lftp \
+	libaio \
+	libtcl \
+	linux-firmware \
+	lm_sensors3 \
+	lvm2 \
+	mailx \
+	make-initrd-devmapper \
+	make-initrd-luks \
+	make-initrd-lvm \
+	make-initrd-mdadm \
+	make-initrd-ucode \
+	mdadm \
+	mdadm-tool \
+	memtest86+ \
+	mokutil \
+	mtools \
+	nfs-utils \
+	ntfs-3g \
+	p7zip \
+	plymouth \
+	plymouth-plugin-script \
+	plymouth-scripts \
+	postfix \
+	postfix-control \
+	procmail \
+	reiserfsprogs \
+	schedutils \
+	sendmail-common \
+	smartmontools \
+	tcl \
+	usbutils \
+	virtualbox-common \
+	xfsprogs 
+echo "VM minimalized"
+
