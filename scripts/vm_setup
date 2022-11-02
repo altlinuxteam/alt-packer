@@ -99,6 +99,7 @@ main() {
 		sudo_step "${STEP_DIR}/setup_virtiofs"
 		sudo_step "${STEP_DIR}/setup_network_interfaces_clean"
 		sudo_step "${STEP_DIR}/setup_update_kernel"
+		sudo_step "${STEP_DIR}/setup_clean"
 		sudo_step "${STEP_DIR}/setup_reset_root_password"
 	fi
 

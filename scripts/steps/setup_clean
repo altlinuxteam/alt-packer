@@ -1,0 +1,20 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Cleaning unnecessary files"
+find /etc -name *.rpmsave -delete
+find /etc -name *.rpmnew -delete
+find /etc -name *.rpmorig -delete
+
+rm -rf /root/tmp
+rm -rf /root/.install-log
+
+find /var/lib/apt/lists/ -mindepth 1 -maxdepth 1 -not -name partial -and -not -name lock -delete
+
+systemctl stop systemd-journal-flush \
+	systemd-journald.socket \
+	systemd-journald-dev-log.socket \
+	systemd-journald-audit.socket \
+	systemd-journald.service
+rm -rf /var/log/journal/*
+echo "Unnecessary files cleaned"
