@@ -6,6 +6,7 @@ apt-get remove -y -D \
 	docs-alt-server \
 	dosfstools \
 	eject \
+	etcnet \
 	fatresize \
 	firmware-aic94xx-seq \
 	firmware-intel-ucode \
@@ -43,8 +44,10 @@ apt-get remove -y -D \
 	plymouth-scripts \
 	postfix \
 	postfix-control \
+	ppp-common \
 	procmail \
 	reiserfsprogs \
+	rp-pppoe-base \
 	schedutils \
 	sendmail-common \
 	smartmontools \

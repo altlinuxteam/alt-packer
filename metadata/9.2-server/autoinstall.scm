@@ -25,7 +25,7 @@
 ; group in SELinux-enabled distros because SELinux must be disabled to
 ; perform 'apt-get dist-upgrade' which you will eventually try to
 ; perform when VM is up.
-("/pkg-install" action "write" lists "centaurus/zero" auto #t)
+("/pkg-install" action "write" lists "centaurus/zero centaurus/systemd-networkd" auto #t)
 ("/preinstall" action "write")
 
 ; It should be noted that 'virtio' block device driver will render
@@ -49,13 +49,14 @@
 ; Here we have settings (enp0s3) for QEMU and (ens4) for VirtualBox
 ; builds. Please note that you may need to adjust interface names when
 ; building VMs using this autoinstall scripts.
-("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
-("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
-("/net-eth" action "write" name "eth1" ipv "4" configuration "dhcp" controlled "etcnet" search "" dns "" computer_name "c245" ipv_enabled #t)
+("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "ens4" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "eth1" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
 
 ; There is no sshd available in Workstation by default so we enable it
 ("/postinstall/laststate" run "cd $(dirname $AUTOINSTALL); cp-metadata autoinstall.sh; bash ./autoinstall.sh; cd -")
-("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd; rm -f /etc/systemd/system/network.service.d/*.conf")
+("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")
