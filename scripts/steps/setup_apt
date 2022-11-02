@@ -2,9 +2,8 @@
 set -euo pipefail
 
 echo "Configuring APT"
-curl \
-	http://${PACKER_HTTP_ADDR}/scripts/repos/alt-mirror-${TARGET_REPOS}-${ARCH}.list \
-	-o /etc/apt/sources.list.d/yandex-mirror-${TARGET_REPOS}-${ARCH}.list
+
+sed -i 's/^[#, ]*\(.*http[s:,:]\/\/.*\)$/\1/' /etc/apt/sources.list.d/alt.list
 
 mv "/tmp/rc.apt" "/etc/rc.d/scripts/apt-cache-on-tmp"
 mv "/tmp/rc.local" "/etc/rc.d/rc.local"
