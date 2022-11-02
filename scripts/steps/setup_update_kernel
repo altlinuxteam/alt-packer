@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Updating kernel"
+update-kernel -y
+remove-old-kernels -f
+echo "Kernel updated"
