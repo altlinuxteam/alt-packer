@@ -1,0 +1,11 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Setting up motd"
+dist_name=$(cat /etc/os-release | grep PRETTY_NAME | sed 's/^PRETTY_NAME="\(.*\) (.*)"$/\1/')
+echo "Welcome to ${dist_name}!" > /etc/issue
+echo "Kernel \\r" >> /etc/issue
+echo "" >> /etc/issue
+echo "Use the credentials provided via cloud-init to log into OS." >> /etc/issue
+echo "Default user: altlinux" >> /etc/issue
+echo "Motd setted up"
