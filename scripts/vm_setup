@@ -76,7 +76,7 @@ main() {
 		sudo_step "${STEP_DIR}/setup_ansible"
 	fi
 
-	if test "${VM_TYPE}" == "yandex"; then
+	if test "${VM_TYPE}" == "cloud"; then
 		sudo_step "/tmp/disable_repos.sh"
 		sudo_step "${STEP_DIR}/setup_minimalize"
 		sudo_step "${STEP_DIR}/setup_apt"

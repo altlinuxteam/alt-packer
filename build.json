@@ -94,7 +94,7 @@
         },
 
         {
-            "name": "yandex-vm",
+            "name": "cloud-vm",
             "type": "qemu",
             "format": "qcow2",
             "accelerator": "kvm",

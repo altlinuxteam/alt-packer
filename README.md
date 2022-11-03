@@ -114,7 +114,7 @@ make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM
 Yandex Cloud
 
 ```sh
-make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=yandex
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=cloud
 ```
 
 OpenNebula
@@ -132,7 +132,7 @@ If necessary, the tag, hash, and date can be overridden using environment variab
 Like this:
 
 ```sh
-make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=yandex GIT_TAG=1.0.1 GIT_DATE=20210623
+make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=cloud GIT_TAG=1.0.1 GIT_DATE=20210623
 ```
 
 ## Publishing images

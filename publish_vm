@@ -80,7 +80,7 @@ main() {
 	assert_value arch ${arch} i586 x86_64
 	assert_value BASE_VERSION ${BASE_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' '9.2' '10' 'sisyphus'
 	assert_value TARGET_VERSION ${TARGET_VERSION} '8.2' '8.3' '8sp' '8.1sp' '9' '9.1' '9.2' '10' 'sisyphus'
-	assert_value VM_TYPE ${VM_TYPE} qemu onebula yandex vbox vagrant-qemu vagrant-vbox
+	assert_value VM_TYPE ${VM_TYPE} qemu onebula cloud vbox vagrant-qemu vagrant-vbox
 
 	if test "${BASE_VERSION}" == "sisyphus"; then
 		TARGET_VERSION="sisyphus"
