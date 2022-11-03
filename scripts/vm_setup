@@ -105,32 +105,6 @@ main() {
 		sudo_step "${STEP_DIR}/setup_reset_root_password"
 	fi
 
-	if test "${VM_TYPE}" == "vkcloud"; then
-		sudo_step "/tmp/disable_repos.sh"
-		sudo_step "${STEP_DIR}/setup_apt"
-		if test "${CLOUDINIT}" == "1"; then
-			if test "${BASE_VERSION}" == "9.2"; then
-				sudo_step "${STEP_DIR}/setup_cloudinit"
-			else
-				sudo_step "${STEP_DIR}/setup_cloudinit_10"
-			fi
-		fi
-		sudo_step "${STEP_DIR}/setup_agent"
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
-		fi
-		sudo_step "${STEP_DIR}/setup_network"
-		sudo_step "${STEP_DIR}/setup_grub2"
-		sudo_step "${STEP_DIR}/setup_grub2_fixed_eth_names"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_virtiofs"
-		sudo_step "${STEP_DIR}/setup_network_interfaces_clean"
-		sudo_step "${STEP_DIR}/setup_remove_unnecessary_locales"
-		sudo_step "${STEP_DIR}/setup_reset_root_password"
-	fi
-
 	if test "${VM_TYPE}" == "onebula"; then
 		sudo_step "/tmp/disable_repos.sh"
 		sudo_step "${STEP_DIR}/setup_apt"
