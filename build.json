@@ -133,6 +133,46 @@
             "shutdown_command": "sudo shutdown -P now"
         },
 
+	{
+            "name": "vkcloud-vm",
+            "type": "qemu",
+            "format": "qcow2",
+            "accelerator": "kvm",
+            "vm_name": "{{ user `vm_name_full` }}.qcow2",
+            "disk_size": 30000,
+            "disk_cache": "unsafe",
+            "disk_interface": "virtio-scsi",
+            "output_directory": "results",
+            "headless": "{{ user `headless` }}",
+            "cpus": 1,
+            "memory": "{{ user `vm_mem` }}",
+
+            "iso_url": "{{ user `iso_url` }}",
+            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_target_path": "{{ user `packer_cache_dir` }}/{{ user `iso_target_path` }}",
+
+            "http_port_min": "{{ user `http_port_min` }}",
+            "http_port_max": "{{ user `http_port_max` }}",
+
+            "ssh_username": "{{ user `ssh_user` }}",
+            "ssh_password": "{{ user `ssh_pass` }}",
+            "ssh_wait_timeout": "60m",
+            "ssh_pty": true,
+
+            "http_directory": "./",
+
+            "boot_wait": "4s",
+            "boot_command": [
+		"<esc><wait><enter><wait>",
+                  "{{ user `boot_cmd` }} ",
+                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		"<wait><enter>"
+            ],
+
+            "shutdown_command": "sudo shutdown -P now"
+        },
+
         {
             "name": "onebula-vm",
             "type": "qemu",
