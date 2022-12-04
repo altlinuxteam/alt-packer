@@ -9,6 +9,12 @@ find /etc -name *.rpmorig -delete
 rm -rf /root/tmp
 rm -rf /root/.install-log
 
+# Yandex Cloud fixes
+rm -rf /root/.ssh/config
+rm -rf /etc/skel/.ssh/config
+echo -n '' > /root/.ssh/authorized_keys
+echo -n '' > /etc/skel/.ssh/authorized_keys
+
 find /var/lib/apt/lists/ -mindepth 1 -maxdepth 1 -not -name partial -and -not -name lock -delete
 
 systemctl stop systemd-journal-flush \
