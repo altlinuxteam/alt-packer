@@ -102,9 +102,9 @@
             "disk_size": 3000,
             "disk_cache": "unsafe",
             "disk_interface": "virtio-scsi",
-	    "disk_discard": "unmap",
-	    "disk_detect_zeroes": "unmap",
-	    "disk_compression": true,
+            "disk_discard": "unmap",
+            "disk_detect_zeroes": "unmap",
+            "disk_compression": true,
             "output_directory": "results",
             "headless": "{{user `headless`}}",
             "cpus": 1,
@@ -280,10 +280,11 @@
         {
             "type": "file",
             "source": "scripts/",
-            "destination": "/tmp/"
+            "destination": "/tmp/.private/root/"
         },
         {
             "type": "shell",
+            "remote_folder": "/tmp/.private/root/",
             "script": "scripts/vm_setup",
             "environment_vars": [
                 "ROOT_PASS={{ user `root_password` }}",
