@@ -21,6 +21,7 @@ systemctl stop systemd-journal-flush \
 	systemd-journald.socket \
 	systemd-journald-dev-log.socket \
 	systemd-journald-audit.socket \
-	systemd-journald.service
+	systemd-journald.service \
+    || true
 rm -rf /var/log/journal/*
 echo "Unnecessary files cleaned"
