@@ -1,11 +1,11 @@
 ("/sysconfig-base/language" action "write" lang ("ru_RU"))
 ("/sysconfig-base/kbd" action "write" layout "ctrl_shift_toggle")
-("/datetime-installer" action "write" commit #t name "RU" zone "UTC" utc #t)
+("/datetime-installer" action "write" commit #t name "RU" zone "Europe/Moscow" utc #t)
 
 ("/evms/control" action "write" control open installer #t)
 ("/evms/control" action "write" control update)
 ; Choices other than "workstation" are not really working.
-("/evms/profiles/workstation" action apply commit #f clearall #t exclude ())
+("/evms/profiles/cloud" action apply commit #f clearall #t exclude ())
 ("/evms/control" action "write" control commit)
 ("/evms/control" action "write" control close)
 
@@ -25,7 +25,7 @@
 ; group in SELinux-enabled distros because SELinux must be disabled to
 ; perform 'apt-get dist-upgrade' which you will eventually try to
 ; perform when VM is up.
-("/pkg-install" action "write" lists "alterator diag-tools zero signal-client" auto #t)
+("/pkg-install" action "write" lists "sp/zero sp/systemd-networkd" auto #t)
 ("/preinstall" action "write")
 
 ; It should be noted that 'virtio' block device driver will render
@@ -49,15 +49,14 @@
 ; Here we have settings (enp0s3) for QEMU and (ens4) for VirtualBox
 ; builds. Please note that you may need to adjust interface names when
 ; building VMs using this autoinstall scripts.
-("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" search "" dns "" computer_name "c245" ipv_enabled #t)
-("/net-eth" action "write" name "ens4" ipv "4" configuration "dhcp" search "" dns "" computer_name "c245" ipv_enabled #t)
+("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "ens4" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
+("/net-eth" action "write" name "eth1" ipv "4" configuration "dhcp" controlled "systemd-networkd" search "" dns "" computer_name "altlinux" ipv_enabled #t onboot #t)
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
-; The 'test' user is created for testing purposes and 'vagrant' user is
-; created for Vagrant users. In case you use Vagrant to manage VMs -
-; disable the 'test' user. Otherwise disable 'vagrant' user to secure
-; your VM.
-("/users/create_account" new_name "test" gecos "" allow_su #t auto #f passwd_1 "123" passwd_2 "123")
-("/users/create_account" new_name "vagrant" gecos "" allow_su #t auto #f passwd_1 "vagrant" passwd_2 "vagrant")
 
+; There is no sshd available in Workstation by default so we enable it
+("/postinstall/laststate" run "cd $(dirname $AUTOINSTALL); cp-metadata autoinstall.sh; bash ./autoinstall.sh; cd -")
+("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")

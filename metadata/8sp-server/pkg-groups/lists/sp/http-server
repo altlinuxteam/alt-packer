@@ -1,0 +1,33 @@
+apache2
+apache2-mod_php7
+apache2-mod_fcgid
+apache2-mod_ssl
+php7
+#php7-cgi
+php7-curl
+php7-dba
+php7-dom
+php7-exif
+# opencv
+#php7-facedetect
+php7-fileinfo
+php7-gd2
+# srpm_cleanup ftbfs
+#php7-imagick2
+# srpm_cleanup ftbfs
+php7-imap
+php7-ldap
+php7-mbstring
+php7-mcrypt
+php7-memcache
+# just missing
+#php7-mhash
+#php7-mysql
+php7-pgsql
+php7-sockets
+#php7-suhosin
+php7-xmlreader
+php7-xmlrpc
+php7-xsl
+php7-zip
+mariadb-client

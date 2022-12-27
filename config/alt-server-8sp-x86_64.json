@@ -1,13 +1,13 @@
 {
-    "iso_url": "",
-    "iso_target_path": "alt-server-8sp-x86_64.iso",
-    "iso_checksum": "3376ac56b27ab48415165b02c326399154f9b9c1",
+    "iso_url": "http://pve.smb.basealt.ru/images/cert/c9f2/x86_64/alt-sp8-server-20211221-x86_64.iso",
+    "iso_target_path": "alt-server-8sp-20211221-x86_64.iso",
+    "iso_checksum": "bc9577aaca92893a52d5725f82c3dae354b5ee77",
     "iso_checksum_type": "sha1",
-    "boot_cmd": "linux net.ifnames=0 selinux=0 automatic=method:cdrom,network:dhcp lowmem quiet=1 showopts",
+    "boot_cmd": "linux selinux=0 showopts",
     "metadata": "8sp-server",
     "descr": "ALT Linux Server 8SP x86_64",
-    "image_version": "1.1.0",
-    "with_cloudinit": "0",
+    "image_version": "1.2.0",
+    "with_cloudinit": "1",
     "with_sisyphus": "0"
 }
 

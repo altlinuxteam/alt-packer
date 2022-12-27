@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Printing system
+X-Alterator-PackageList=sp/cups-server
+X-Alterator-Required=no
+Name[ru_RU]=Система печати

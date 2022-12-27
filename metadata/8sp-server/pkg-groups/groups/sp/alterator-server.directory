@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Management interface
+X-Alterator-PackageList=sp/alterator-server
+X-Alterator-Required=no
+Name[ru_RU]=Интерфейс управления

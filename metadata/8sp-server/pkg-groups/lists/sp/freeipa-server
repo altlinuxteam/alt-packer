@@ -1,0 +1,5 @@
+freeipa-server-trust-ad
+freeipa-server-dns
+openntpd
+freeipa-client
+libsss_sudo

@@ -1,0 +1,11 @@
+xenomai
+xenomai-mercury
+linux-rt-tests
+stress-ng
+trace-cmd
+kernelshark
+perf-tools
+libgpiod
+tuned
+tuned-profiles-realtime
+kernel-image-rt

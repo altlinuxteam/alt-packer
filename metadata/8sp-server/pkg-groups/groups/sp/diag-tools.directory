@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Diagnostic tools
+X-Alterator-PackageList=sp/diag-tools
+X-Alterator-Parent=sp/server-apps
+X-Alterator-Required=no
+Name[ru_RU]=Утилиты для диагностики
+Categories=Server;Diagnostics
+# NB: as the list may expand, skip adding Networking

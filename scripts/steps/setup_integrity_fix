@@ -1,0 +1,9 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Fixing integrity alert"
+
+integalert fix
+
+echo "Integrity alert fixed"
+

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=SambaDC Server (AD controller)
+X-Alterator-PackageList=sp/sambaDC
+X-Alterator-Conflicts=sp/samba sp/domain-server sp/ad-client
+X-Alterator-Required=no
+X-Alterator-Parent=sp/server-apps
+Name[ru_RU]=Сервер SambaDC (контроллер AD)
+Categories=Server;Networking
+

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=IPMI tools
+X-Alterator-PackageList=sp/ipmi
+X-Alterator-Parent=sp/server-apps
+X-Alterator-Required=no
+Name[ru_RU]=Утилиты для поддержки IPMI
+Categories=Server;IPMI
+

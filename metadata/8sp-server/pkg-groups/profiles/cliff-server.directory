@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Directory
+Name=Office Server
+Name[ru_RU]=Офисный сервер
+X-Alterator-Groups=sp/dhcp-server-a sp/dns-server-a sp/ftp-server-a sp/mail-server-a sp/netinst sp/http-server sp/dns-server sp/bacula-server sp/samba sp/domain-server sp/alterator-server sp/cups-server sp/signal-client sp/smartcard

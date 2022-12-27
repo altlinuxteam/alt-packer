@@ -1,0 +1,12 @@
+samba-common
+ldap-user-tools
+samba
+samba-client
+alt-domain-server
+samba-common-tools
+samba-libs
+alterator-openldap
+alterator-kdc
+autofs
+avahi-daemon
+avahi-tools

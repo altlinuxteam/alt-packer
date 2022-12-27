@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=HTTP Server (Apache2, PHP)
+X-Alterator-PackageList=sp/http-server
+X-Alterator-Parent=sp/server-apps
+X-Alterator-Required=no
+Name[ru_RU]=Сервер HTTP (Apache2, PHP)
+Categories=Server;Networking
+

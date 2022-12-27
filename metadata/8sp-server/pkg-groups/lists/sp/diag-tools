@@ -1,0 +1,10 @@
+# diagnostic tools (see also disk-server-light.in)
+iftop
+lft
+mtr
+nmap
+scanssh
+tcptraceroute
+telnet
+whois
+minicom

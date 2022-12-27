@@ -79,11 +79,14 @@ main() {
 
 	if test "${VM_TYPE}" == "cloud"; then
 		sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_minimalize"
+        if test "${BASE_VERSION}" != "8sp"; then
+		    sudo_step "${STEP_DIR}/setup_minimalize_server_10"
+        fi
 		sudo_step "${STEP_DIR}/setup_apt"
 		if test "${CLOUDINIT}" == "1"; then
-			if test "${BASE_VERSION}" == "9.2"; then
+			if test "${BASE_VERSION}" == "9.2" || test "${BASE_VERSION}" == "8sp"; then
 				sudo_step "${STEP_DIR}/setup_cloudinit"
+				sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
 			else
 				sudo_step "${STEP_DIR}/setup_cloudinit_10"
 			fi
@@ -105,6 +108,9 @@ main() {
 		sudo_step "${STEP_DIR}/setup_motd"
 		sudo_step "${STEP_DIR}/setup_reset_root_password"
 		sudo_step "${STEP_DIR}/setup_disable_sshd_password_auth"
+        if test "${BASE_VERSION}" == "8sp"; then
+		    sudo_step "${STEP_DIR}/setup_integrity_fix"
+        fi
 	fi
 
 	if test "${VM_TYPE}" == "onebula"; then

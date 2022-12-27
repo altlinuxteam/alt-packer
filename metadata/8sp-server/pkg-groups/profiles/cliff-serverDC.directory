@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Directory
+Name=Samba-DC Server (AD controller)
+Name[ru_RU]=Сервер Samba-DC (контроллер AD)
+X-Alterator-Groups=sp/dhcp-server-a sp/mail-server-a sp/netinst sp/freenx-server sp/http-server sp/dns-server sp/bacula-server sp/sambaDC sp/cups-server sp/sogo
