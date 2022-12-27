@@ -1,0 +1,9 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Removing cdroms repos from apt sources"
+
+apt-repo rm all cdroms
+
+echo "Cdrom repos from apt sources removed"
+

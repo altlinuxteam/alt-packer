@@ -3,8 +3,6 @@ set -euo pipefail
 
 echo "Configuring APT"
 
-sed -i 's/^[#, ]*\(.*http[s:,:]\/\/.*\)$/\1/' /etc/apt/sources.list.d/alt.list
-
 mv "/tmp/.private/root/rc.apt" "/etc/rc.d/scripts/apt-cache-on-tmp"
 mv "/tmp/.private/root/rc.local" "/etc/rc.d/rc.local"
 mv "/tmp/.private/root/tmp.cache.conf" "/etc/apt/apt.conf.d/tmp.cache.conf"
@@ -14,7 +12,6 @@ apt-get -qy update
 apt-get -qy install apt rpm
 apt-get -qy dist-upgrade
 apt-get clean
-rm -f "/etc/apt/sources.list.d/sources.installer.list"
 
 echo "APT configured"
 
