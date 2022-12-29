@@ -1,0 +1,7 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Enabling sudo controls"
+control sudo public
+echo "Sudo controls enabled"
+
