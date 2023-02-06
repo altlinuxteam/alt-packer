@@ -100,7 +100,7 @@ main() {
 		${STEP_DIR}/setup_enable_sudo_controls
 		${STEP_DIR}/setup_disable_sshd_password_auth
         if test "${BASE_VERSION}" == "8sp"; then
-		    sudo_step "${STEP_DIR}/setup_integrity_fix"
+		    ${STEP_DIR}/setup_integrity_fix
         fi
 	fi
 
