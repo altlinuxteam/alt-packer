@@ -30,144 +30,134 @@ show_vars() {
 	echo "Update to Sisyphus: ${SISYPHUS}"
 }
 
-sudo_step() {
-	script_name="${1}"
-
-	echo "STEP: ${script_name}"
-	sudo -E sh -c "${script_name}"
-}
-
 main() {
-	echo "STEP: setup_sudo"
-	{ sleep 2 ; echo "${ROOT_PASS}" ; } | script -q -c "su -c ${STEP_DIR}/setup_sudo" /dev/null
-
 	if test "${VM_TYPE}" == "qemu"; then
-        sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_apt"
+        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			sudo_step "${STEP_DIR}/setup_cloudinit"
+			${STEP_DIR}/setup_cloudinit
 		fi
-		sudo_step "${STEP_DIR}/setup_agent"
+		${STEP_DIR}/setup_agent
 		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
+			${STEP_DIR}/setup_udev
 		fi
-		sudo_step "${STEP_DIR}/setup_network"
-		sudo_step "${STEP_DIR}/setup_root"
-		sudo_step "${STEP_DIR}/setup_test_user"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_ansible"
+		${STEP_DIR}/setup_network
+		${STEP_DIR}/setup_root
+		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_ansible
 	fi
 
 	if test "${VM_TYPE}" == "vbox"; then
-        sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_apt"
+        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			sudo_step "${STEP_DIR}/setup_cloudinit"
+			${STEP_DIR}/setup_cloudinit
 		fi
 		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
+			${STEP_DIR}/setup_udev
 		fi
-		sudo_step "${FILES_DIR}/install-guest-tools.sh"
-		sudo_step "${STEP_DIR}/setup_test_user"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_ansible"
+		${FILES_DIR}/install-guest-tools.sh
+		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_ansible
 	fi
 
 	if test "${VM_TYPE}" == "cloud"; then
-		sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
+		${STEP_DIR}/setup_remove_cdroms_repos
         if test "${BASE_VERSION}" != "8sp"; then
-		    sudo_step "${STEP_DIR}/setup_minimalize_server_10"
+		    ${STEP_DIR}/setup_minimalize_server_10
         fi
-		sudo_step "${STEP_DIR}/setup_apt"
+		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
 			if test "${BASE_VERSION}" == "9.2" || test "${BASE_VERSION}" == "8sp"; then
-				sudo_step "${STEP_DIR}/setup_cloudinit"
-				sudo_step "${STEP_DIR}/setup_cloudinit_yandex"
+				${STEP_DIR}/setup_cloudinit
+				${STEP_DIR}/setup_cloudinit_yandex
 			else
-				sudo_step "${STEP_DIR}/setup_cloudinit_10"
+				${STEP_DIR}/setup_cloudinit_10
 			fi
 		fi
-		sudo_step "${STEP_DIR}/setup_agent"
+		${STEP_DIR}/setup_agent
 		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
+			${STEP_DIR}/setup_udev
 		fi
-		sudo_step "${STEP_DIR}/setup_grub2"
-		sudo_step "${STEP_DIR}/setup_grub2_fixed_eth_names"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_virtiofs"
-		sudo_step "${STEP_DIR}/setup_network_interfaces_clean"
-		sudo_step "${STEP_DIR}/setup_remove_unnecessary_locales"
-		sudo_step "${STEP_DIR}/setup_update_kernel"
-		sudo_step "${STEP_DIR}/setup_clean"
-		sudo_step "${STEP_DIR}/setup_motd"
-		sudo_step "${STEP_DIR}/setup_reset_root_password"
-		sudo_step "${STEP_DIR}/setup_enable_sudo_controls"
-		sudo_step "${STEP_DIR}/setup_disable_sshd_password_auth"
+		${STEP_DIR}/setup_grub2
+		${STEP_DIR}/setup_grub2_fixed_eth_names
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_virtiofs
+		${STEP_DIR}/setup_network_interfaces_clean
+		${STEP_DIR}/setup_remove_unnecessary_locales
+		${STEP_DIR}/setup_update_kernel
+		${STEP_DIR}/setup_clean
+		${STEP_DIR}/setup_motd
+		${STEP_DIR}/setup_reset_root_password
+		${STEP_DIR}/setup_enable_sudo_controls
+		${STEP_DIR}/setup_disable_sshd_password_auth
         if test "${BASE_VERSION}" == "8sp"; then
 		    sudo_step "${STEP_DIR}/setup_integrity_fix"
         fi
 	fi
 
 	if test "${VM_TYPE}" == "onebula"; then
-        sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_apt"
-		sudo_step "${STEP_DIR}/setup_onebula"
-		sudo_step "${STEP_DIR}/setup_agent"
-		sudo_step "${STEP_DIR}/setup_etcnet_clean"
-		sudo_step "${STEP_DIR}/setup_onebula_disable_NetworkManager"
-		sudo_step "${STEP_DIR}/setup_systemd-networkd"
-		sudo_step "${STEP_DIR}/setup_test_user"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_ansible"
+        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_apt
+		${STEP_DIR}/setup_onebula
+		${STEP_DIR}/setup_agent
+		${STEP_DIR}/setup_etcnet_clean
+		${STEP_DIR}/setup_onebula_disable_NetworkManager
+		${STEP_DIR}/setup_systemd-networkd
+		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_ansible
 	fi
 
 	if test "${VM_TYPE}" == "vagrant-qemu"; then
-        sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_apt"
+        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			sudo_step "${STEP_DIR}/setup_cloudinit"
+			${STEP_DIR}/setup_cloudinit
 		fi
-		sudo_step "${STEP_DIR}/setup_agent"
+		${STEP_DIR}/setup_agent
 		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
+			${STEP_DIR}/setup_udev
 		fi
-		sudo_step "${STEP_DIR}/setup_network"
-		sudo_step "${STEP_DIR}/setup_root"
-		sudo_step "${STEP_DIR}/setup_vagrant"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_ansible"
-		sudo_step "${STEP_DIR}/setup_altlinux_release"
+		${STEP_DIR}/setup_network
+		${STEP_DIR}/setup_root
+		${STEP_DIR}/setup_vagrant
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_ansible
+		${STEP_DIR}/setup_altlinux_release
 	fi
 	
 	if test "${VM_TYPE}" == "vagrant-vbox"; then
-        sudo_step "${STEP_DIR}/setup_remove_cdroms_repos"
-		sudo_step "${STEP_DIR}/setup_apt"
+        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			sudo_step "${STEP_DIR}/setup_cloudinit"
+			${STEP_DIR}/setup_cloudinit
 		fi
 		if test "${BASE_VERSION//.*/}" -le "9"; then
-			sudo_step "${STEP_DIR}/setup_udev"
+			${STEP_DIR}/setup_udev
 		fi
-		sudo_step "${FILES_DIR}/install-guest-tools.sh"
-		sudo_step "${STEP_DIR}/setup_vagrant"
-		sudo_step "${STEP_DIR}/setup_restore_sshd_config"
-		sudo_step "${STEP_DIR}/setup_ssh"
-		sudo_step "${STEP_DIR}/setup_prepare_new_instance"
-		sudo_step "${STEP_DIR}/setup_ansible"
-		sudo_step "${STEP_DIR}/setup_altlinux_release"
+		${FILES_DIR}/install-guest-tools.sh
+		${STEP_DIR}/setup_vagrant
+		${STEP_DIR}/setup_restore_sshd_config
+		${STEP_DIR}/setup_ssh
+		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_ansible
+		${STEP_DIR}/setup_altlinux_release
 	fi
 
-	sudo_step "${STEP_DIR}/setup_version"
+	${STEP_DIR}/setup_version
 }
 
 show_vars

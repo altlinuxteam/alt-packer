@@ -50,7 +50,7 @@
 		"<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now"
+            "shutdown_command": "shutdown -P now"
         },
 
         {
@@ -90,7 +90,7 @@
 		"<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now"
+            "shutdown_command": "shutdown -P now"
         },
 
         {
@@ -133,7 +133,7 @@
 		"<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now"
+            "shutdown_command": "shutdown -P now"
         },
 
         {
@@ -173,7 +173,7 @@
 		"<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now"
+            "shutdown_command": "shutdown -P now"
         },
 
         {
@@ -213,7 +213,7 @@
                 "<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now",
+            "shutdown_command": "shutdown -P now",
             "post_shutdown_delay": "10s",
 
             "export_opts":
@@ -262,7 +262,7 @@
                 "<wait><enter>"
             ],
 
-            "shutdown_command": "sudo shutdown -P now",
+            "shutdown_command": "shutdown -P now",
             "post_shutdown_delay": "10s",
 
             "export_opts":
