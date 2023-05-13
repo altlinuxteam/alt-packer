@@ -6,10 +6,10 @@
     "boot_escape_cmd": "c",
     "boot_cmd": "linux /boot/vmlinuz showopts selinux=0 changedisk automatic=method:cdrom lowmem",
     "boot_finish_cmd": "<wait><enter>initrd /boot/initrd.img<enter>boot<enter>",
-    "metadata": "9.2-server",
+    "metadata": "alt-server-10-x86_64",
     "descr": "ALT Linux Server 10.1 x86_64",
     "image_version": "1.0.0",
     "with_cloudinit": "1",
-    "with_sisyphus": "0"
+    "with_sisyphus": "0",
 }
 

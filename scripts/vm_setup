@@ -38,9 +38,6 @@ main() {
 			${STEP_DIR}/setup_cloudinit
 		fi
 		${STEP_DIR}/setup_agent
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			${STEP_DIR}/setup_udev
-		fi
 		${STEP_DIR}/setup_network
 		${STEP_DIR}/setup_root
 		${STEP_DIR}/setup_test_user
@@ -55,9 +52,6 @@ main() {
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
 			${STEP_DIR}/setup_cloudinit
-		fi
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			${STEP_DIR}/setup_udev
 		fi
 		${FILES_DIR}/install-guest-tools.sh
 		${STEP_DIR}/setup_test_user
@@ -74,7 +68,7 @@ main() {
         fi
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			if test "${BASE_VERSION}" == "9.2" || test "${BASE_VERSION}" == "8sp"; then
+			if test "${BASE_VERSION}" == "8sp"; then
 				${STEP_DIR}/setup_cloudinit
 				${STEP_DIR}/setup_cloudinit_yandex
 			else
@@ -82,9 +76,6 @@ main() {
 			fi
 		fi
 		${STEP_DIR}/setup_agent
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			${STEP_DIR}/setup_udev
-		fi
 		${STEP_DIR}/setup_grub2
 		${STEP_DIR}/setup_grub2_fixed_eth_names
 		${STEP_DIR}/setup_restore_sshd_config
@@ -126,9 +117,6 @@ main() {
 			${STEP_DIR}/setup_cloudinit
 		fi
 		${STEP_DIR}/setup_agent
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			${STEP_DIR}/setup_udev
-		fi
 		${STEP_DIR}/setup_network
 		${STEP_DIR}/setup_root
 		${STEP_DIR}/setup_vagrant
@@ -144,9 +132,6 @@ main() {
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
 			${STEP_DIR}/setup_cloudinit
-		fi
-		if test "${BASE_VERSION//.*/}" -le "9"; then
-			${STEP_DIR}/setup_udev
 		fi
 		${FILES_DIR}/install-guest-tools.sh
 		${STEP_DIR}/setup_vagrant

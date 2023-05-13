@@ -4,7 +4,7 @@
     "iso_checksum": "bc9577aaca92893a52d5725f82c3dae354b5ee77",
     "iso_checksum_type": "sha1",
     "boot_cmd": "linux selinux=0 showopts",
-    "metadata": "8sp-server",
+    "metadata": "alt-server-8sp-x86_64",
     "descr": "ALT Linux Server 8SP x86_64",
     "image_version": "1.2.0",
     "with_cloudinit": "1",

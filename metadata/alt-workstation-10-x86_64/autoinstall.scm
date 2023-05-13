@@ -1,5 +1,6 @@
 ("/sysconfig-base/language" action "write" lang ("ru_RU"))
 ("/sysconfig-base/kbd" action "write" layout "ctrl_shift_toggle")
+; Alterator in p9 prevents from installing "UTC" zone somehow.
 ("/datetime-installer" action "write" commit #t name "RU" zone "Europe/Moscow" utc #t)
 
 ("/evms/control" action "write" control open installer #t)
@@ -25,7 +26,11 @@
 ; group in SELinux-enabled distros because SELinux must be disabled to
 ; perform 'apt-get dist-upgrade' which you will eventually try to
 ; perform when VM is up.
-("/pkg-install" action "write" lists "centaurus/10-alterator centaurus/zero" auto #t)
+;
+; SUDDENLY: You won't get Alterator in installed system chroot without
+; "/pkg-install" call even if no package lists needed so you MUST invoke
+; it every time.
+("/pkg-install" action "write" lists "" auto #t)
 ("/preinstall" action "write")
 
 ; It should be noted that 'virtio' block device driver will render
@@ -49,8 +54,8 @@
 ; Here we have settings (enp0s3) for QEMU and (ens4) for VirtualBox
 ; builds. Please note that you may need to adjust interface names when
 ; building VMs using this autoinstall scripts.
-("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" search "" dns "" computer_name "c245" ipv_enabled #t)
-("/net-eth" action "write" name "ens4" ipv "4" configuration "dhcp" search "" dns "" computer_name "c245" ipv_enabled #t)
+("/net-eth" action "write" name "eth0" ipv "4" configuration "dhcp" controlled "NetworkManagerNative" search "" dns "" computer_name "c245" ipv_enabled #t)
+("/net-eth" action "write" name "enp0s3" ipv "4" configuration "dhcp" controlled "NetworkManagerNative" search "" dns "" computer_name "c245" ipv_enabled #t)
 ("/net-eth" action "write" commit #t)
 
 ("/root/change_password" language ("ru_RU") passwd_2 "123" passwd_1 "123")
@@ -58,4 +63,3 @@
 ; There is no sshd available in Workstation by default so we enable it
 ("/postinstall/laststate" run "cd $(dirname $AUTOINSTALL); cp-metadata autoinstall.sh; bash ./autoinstall.sh; cd -")
 ("/postinstall/firsttime" run "systemctl enable sshd; systemctl start sshd")
-
