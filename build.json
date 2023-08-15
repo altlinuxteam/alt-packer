@@ -9,7 +9,9 @@
         "apt_sources": "{{env `PACKER_APT_SOURCES`}}",
         "vm_type": "{{env `PACKER_VM_TYPE`}}",
         "root_password": "123",
-        "vm_name_full": "{{env `PACKER_IMAGE_FILENAME`}}"
+        "vm_name_full": "{{env `PACKER_IMAGE_FILENAME`}}",
+        "boot_escape_cmd": "<esc><wait><enter><wait>",
+        "boot_finish_cmd": "<wait><enter>"
     },
 
     "builders": [
@@ -44,10 +46,10 @@
 
             "boot_wait": "4s",
             "boot_command": [
-		"<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-		"<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now"
@@ -84,10 +86,10 @@
 
             "boot_wait": "4s",
             "boot_command": [
-		"<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-		"<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now"
@@ -127,10 +129,10 @@
 
             "boot_wait": "4s",
             "boot_command": [
-		"<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-		"<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now"
@@ -167,10 +169,10 @@
 
             "boot_wait": "2s",
             "boot_command": [
-		"<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-		"<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now"
@@ -207,10 +209,10 @@
 
             "boot_wait": "5s",
             "boot_command": [
-                "<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-                "<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now",
@@ -256,10 +258,10 @@
 
             "boot_wait": "5s",
             "boot_command": [
-                "<esc><wait><enter><wait>",
-                  "{{ user `boot_cmd` }} ",
-                  "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
-                "<wait><enter>"
+                "{{ user `boot_escape_cmd` }}<wait>",
+                    "{{ user `boot_cmd` }} ",
+                    "ai curl=http://{{.HTTPIP}}:{{.HTTPPort}}/metadata/{{ user `metadata` }}/ ",
+		        "{{ user `boot_finish_cmd` }}"
             ],
 
             "shutdown_command": "shutdown -P now",
