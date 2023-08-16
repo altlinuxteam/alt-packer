@@ -1,0 +1,14 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p10/images/server/x86_64/alt-server-10.0-x86_64.iso",
+    "iso_target_path": "alt-server-10-x86_64.iso",
+    "iso_checksum": "3cc064c3410e8763c2b7bbd8d0af4936",
+    "iso_checksum_type": "md5",
+    "boot_cmd": "linux showopts selinux=0 ",
+    "metadata": "alt-server-10-yandex-x86_64",
+    "descr": "ALT Linux Server 10 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0",
+    "disk_size": "3000"
+}
+
