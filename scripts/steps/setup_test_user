@@ -5,5 +5,6 @@ echo "Configuring Test user"
 alterator-cmdline -d /users/create_account new_name "test" allow_su true auto true passwd_1 "123" passwd_2 "123"
 mkdir -p /home/test/.ssh
 chown -Rv test:test /home/test
+gpasswd -a test wheel
 echo "Test user configured"
 
