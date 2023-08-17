@@ -1,0 +1,16 @@
+{
+    "iso_url": "http://ftp.altlinux.org/pub/distributions/ALTLinux/p10/images/server/x86_64/alt-server-10.1-x86_64.iso",
+    "iso_target_path": "alt-server-10.1-x86_64.iso",
+    "iso_checksum": "80d02a4d1cf54a8ab5868615cabb4255",
+    "iso_checksum_type": "md5",
+    "boot_escape_cmd": "c",
+    "boot_cmd": "linux /boot/vmlinuz showopts selinux=0 changedisk automatic=method:cdrom lowmem",
+    "boot_finish_cmd": "<wait><enter>initrd /boot/initrd.img<enter>boot<enter>",
+    "metadata": "alt-server-10.1-yandex-x86_64",
+    "descr": "ALT Linux Server 10.1 x86_64",
+    "image_version": "1.0.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0",
+    "disk_size": "4000"
+}
+

@@ -63,8 +63,11 @@ main() {
 
 	if test "${VM_TYPE}" == "cloud"; then
 		${STEP_DIR}/setup_remove_cdroms_repos
-        if test "${BASE_VERSION}" != "8sp"; then
+        if test "${BASE_VERSION}" == "10" || test "${BASE_VERSION}" == "10-yandex"; then
 		    ${STEP_DIR}/setup_minimalize_server_10
+        fi
+        if test "${BASE_VERSION}" == "10.1" || test "${BASE_VERSION}" == "10.1-yandex"; then
+		    ${STEP_DIR}/setup_minimalize_server_10.1
         fi
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
