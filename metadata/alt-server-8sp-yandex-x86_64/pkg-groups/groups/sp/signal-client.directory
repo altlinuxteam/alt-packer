@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+X-Alterator-Required=no
+Name=Signaling system client
+X-Alterator-PackageList=sp/signal-client
+X-Alterator-Conflicts=sp/signal-monitor
+X-Alterator-Required=no
+Name[ru_RU]=Датчики системы сигнализации

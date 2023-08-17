@@ -1,0 +1,14 @@
+{
+    "iso_url": "http://pve.smb.basealt.ru/images/cert/c9f2/x86_64/alt-sp8-server-20211221-x86_64.iso",
+    "iso_target_path": "alt-server-8sp-20211221-x86_64.iso",
+    "iso_checksum": "bc9577aaca92893a52d5725f82c3dae354b5ee77",
+    "iso_checksum_type": "sha1",
+    "boot_cmd": "linux selinux=0 showopts",
+    "metadata": "alt-server-8sp-yandex-x86_64",
+    "descr": "ALT Linux Server 8SP x86_64",
+    "image_version": "1.2.0",
+    "with_cloudinit": "1",
+    "with_sisyphus": "0",
+    "disk_size": "3000"
+}
+

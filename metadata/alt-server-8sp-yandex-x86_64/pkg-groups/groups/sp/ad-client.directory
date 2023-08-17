@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=ActiveDirectory client
+X-Alterator-PackageList=sp/ad-client
+X-Alterator-Required=no
+Name[ru_RU]=Клиент ActiveDirectory
+Categories=Server;Networking

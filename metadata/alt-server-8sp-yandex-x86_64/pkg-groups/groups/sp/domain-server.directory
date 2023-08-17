@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=ALT Domain Server (ldap+kerberos)
+X-Alterator-PackageList=sp/domain-server
+X-Alterator-Parent=sp/alterator-server
+X-Alterator-Required=no
+Name[ru_RU]=Сервер Домена LDAP и Kerberos

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=OpenUDS virtual desktop server
+X-Alterator-PackageList=sp/openuds
+X-Alterator-Required=no
+X-Alterator-Conflicts=sp/openuds-tunnel
+X-Alterator-Parent=sp/server-apps
+Name[ru_RU]=Сервер виртуальных рабочих столов OpenUDS
+Categories=Server;Networking
+

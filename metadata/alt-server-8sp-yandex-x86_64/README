@@ -1,0 +1,3 @@
+Command for pkg-groups.tar repacking
+
+tar --owner=0 --group=0 -cf pkg-groups.tar -C pkg-groups lists groups profiles

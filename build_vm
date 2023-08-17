@@ -63,8 +63,8 @@ main() {
 	assert_value target ${target} alt-server alt-workstation alt-kworkstation
 	assert_value arch ${arch} i586 x86_64
 	assert_value headless ${headless} true false
-	assert_value BASE_VERSION ${BASE_VERSION} '8sp' '10' '10.1' '10-yandex' '10.1-yandex' 'sisyphus'
-	assert_value TARGET_VERSION ${TARGET_VERSION} '8sp' '10' '10.1' '10-yandex' '10.1-yandex' 'sisyphus'
+	assert_value BASE_VERSION ${BASE_VERSION} '8sp' '8sp-yandex' '10' '10.1' '10-yandex' '10.1-yandex' 'sisyphus'
+	assert_value TARGET_VERSION ${TARGET_VERSION} '8sp' '8sp-yandex' '10' '10.1' '10-yandex' '10.1-yandex' 'sisyphus'
 	assert_value VM_TYPE ${VM_TYPE} qemu onebula vbox vagrant-qemu vagrant-vbox cloud
 	assert_value onerror ${onerror} ask cleanup abort
 

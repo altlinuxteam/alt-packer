@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Semi-realtime kernel and tools
+X-Alterator-PackageList=sp/rt
+X-Alterator-Required=no
+Name[ru_RU]=Ядро для выполнения задач с контролируемыми задержками
+

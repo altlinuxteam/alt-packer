@@ -1,0 +1,5 @@
+bacula9-director-sqlite3
+bacula9-director-postgresql
+bacula9-storage
+bacula9-director-mysql
+bacula9-console

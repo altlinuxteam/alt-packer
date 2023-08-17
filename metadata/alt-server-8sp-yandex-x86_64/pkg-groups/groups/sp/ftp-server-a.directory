@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=FTP server
+X-Alterator-PackageList=sp/ftp-server-a
+X-Alterator-Parent=sp/alterator-server
+X-Alterator-Depends=sp/ftp-server
+X-Alterator-Required=no
+Name[ru_RU]=Сервер FTP
+Categories=Server;Networking

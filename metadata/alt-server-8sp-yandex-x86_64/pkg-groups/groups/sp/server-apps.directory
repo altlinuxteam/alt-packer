@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Directory
+Name=Server applications
+X-Alterator-PackageList=sp/zero
+X-Alterator-Required=no
+Name[ru_RU]=Серверные приложения

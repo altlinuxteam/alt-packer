@@ -1,0 +1,10 @@
+cups
+cups-ppd
+ghostscript-cups
+printer-drivers-base
+foomatic-db
+cups-filters
+hplip
+hplip-hpcups
+hplip-hpijs
+hplip-PPDs
