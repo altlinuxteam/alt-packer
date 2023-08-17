@@ -111,10 +111,16 @@ make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM
 
 ### Building images for clouds
 
-Yandex Cloud
+Default Cloud
 
 ```sh
 make image target=alt-server headless=false BASE_VERSION=10 TARGET_VERSION=10 VM_TYPE=cloud
+```
+
+Yandex Cloud
+
+```sh
+make image target=alt-server headless=false BASE_VERSION=10-yandex TARGET_VERSION=10-yandex VM_TYPE=cloud
 ```
 
 OpenNebula
