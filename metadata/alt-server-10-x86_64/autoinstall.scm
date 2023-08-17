@@ -4,8 +4,7 @@
 
 ("/evms/control" action "write" control open installer #t)
 ("/evms/control" action "write" control update)
-; Choices other than "workstation" are not really working.
-("/evms/profiles/workstation" action apply commit #f clearall #t exclude ())
+("/evms/profiles/server" action apply commit #f clearall #t exclude ())
 ("/evms/control" action "write" control commit)
 ("/evms/control" action "write" control close)
 

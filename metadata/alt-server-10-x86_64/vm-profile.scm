@@ -1,9 +1,8 @@
-((workstation
-  (title . "Setup for workstation")
+((server
+  (title . "Setup for server")
   (action . trivial)
   (actiondata 
                ; Disk size in sectors
-	       ; Calculating: disk_size (M) * 1024 * 2 - 4096
-               ;("/" (size 10235904 . #t ) (fsim . "Ext2/3") (methods plain))
-               ("/" (size 6139904 . #t ) (fsim . "Ext2/3") (methods plain))
+               ; Calculating: disk_size (M) * 1024 * 2 - 4096
+               ("/" (size 61435904 . #t ) (fsim . "Ext2/3") (methods plain))
                )))
