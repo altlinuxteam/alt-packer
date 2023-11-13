@@ -1,0 +1,6 @@
+#! /bin/sh
+set -euo pipefail
+
+echo "Installing VirtualBox Guest Tools"
+apt-get -y install virtualbox-guest-utils
+echo "VirtualBox Guest Tools installed"

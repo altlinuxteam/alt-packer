@@ -32,18 +32,26 @@ show_vars() {
 
 main() {
 	if test "${VM_TYPE}" == "qemu"; then
-        ${STEP_DIR}/setup_remove_cdroms_repos
+		${STEP_DIR}/setup_remove_cdroms_repos
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			${STEP_DIR}/setup_cloudinit
+			${STEP_DIR}/setup_cloudinit_10
 		fi
 		${STEP_DIR}/setup_agent
-		${STEP_DIR}/setup_network
-		${STEP_DIR}/setup_root
-		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_grub2
+		${STEP_DIR}/setup_grub2_fixed_eth_names
 		${STEP_DIR}/setup_restore_sshd_config
 		${STEP_DIR}/setup_ssh
 		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_virtiofs
+		${STEP_DIR}/setup_network_interfaces_clean
+		${STEP_DIR}/setup_remove_unnecessary_locales
+		${STEP_DIR}/setup_update_kernel
+		${STEP_DIR}/setup_clean
+		${STEP_DIR}/setup_motd
+		${STEP_DIR}/setup_root
+		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_enable_sudo_controls
 		${STEP_DIR}/setup_ansible
 	fi
 
@@ -51,13 +59,24 @@ main() {
         ${STEP_DIR}/setup_remove_cdroms_repos
 		${STEP_DIR}/setup_apt
 		if test "${CLOUDINIT}" == "1"; then
-			${STEP_DIR}/setup_cloudinit
+			${STEP_DIR}/setup_cloudinit_10
 		fi
-		${FILES_DIR}/install-guest-tools.sh
-		${STEP_DIR}/setup_test_user
+        ${STEP_DIR}/setup_install_virtualbox_guest_utils
+        ${STEP_DIR}/setup_grub2
+		${STEP_DIR}/setup_grub2_fixed_eth_names
 		${STEP_DIR}/setup_restore_sshd_config
 		${STEP_DIR}/setup_ssh
 		${STEP_DIR}/setup_prepare_new_instance
+		${STEP_DIR}/setup_virtiofs
+		${STEP_DIR}/setup_network_interfaces_clean
+		${STEP_DIR}/setup_remove_unnecessary_locales
+		${STEP_DIR}/setup_update_kernel
+		${STEP_DIR}/setup_clean
+		${STEP_DIR}/setup_motd
+		${STEP_DIR}/setup_root
+		${STEP_DIR}/setup_test_user
+		${STEP_DIR}/setup_enable_sudo_controls
+		${STEP_DIR}/setup_disable_sshd_password_auth
 		${STEP_DIR}/setup_ansible
 	fi
 
@@ -136,7 +155,7 @@ main() {
 		if test "${CLOUDINIT}" == "1"; then
 			${STEP_DIR}/setup_cloudinit
 		fi
-		${FILES_DIR}/install-guest-tools.sh
+        ${STEP_DIR}/setup_install_virtualbox_guest_utils
 		${STEP_DIR}/setup_vagrant
 		${STEP_DIR}/setup_restore_sshd_config
 		${STEP_DIR}/setup_ssh
